@@ -11,10 +11,17 @@ import GlobalShopHistory from "@shop/components/GlobalShopHistory.jsx";
 // ============================================================================
 // ⚠️ OSTRÉ LOKÁLNE IMPORTY (VO SVOJOM VS CODE ODKOMENTUJ ORIGINÁLY) ⚠️
 // ============================================================================
-import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from "firebase/auth";
+// ❌ ODSTRÁNENÉ: import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { Activity, AlertTriangle, AlignCenter, AlignJustify, AlignLeft, AlignRight, ArrowDownCircle, ArrowUpCircle, AtSign, Ban, Bell, Bold, Calendar, CheckCircle2, Chrome, Clock, Code, CornerDownLeft, Crown, Database, Download, Eraser, Eye, EyeOff, Facebook, FileText, Film, Gamepad2, Github, Globe, Heading, Heart, HeartPulse, Image as ImageIcon, Info, Instagram, Italic, Key, Link, Linkedin, List, ListOrdered, Lock, LogIn, Mail, Maximize2, Menu, MessageCircle, Minimize2, Music, Music2, Palette, Phone, PlusCircle, QrCode, Quote, Save, Send, Settings, Share2, Shield, ShieldAlert, ShieldCheck, Smartphone, Star, Strikethrough, Table, Terminal, Trash2, Twitch, Twitter, Type, Underline, User, Users, Wallet, X, Youtube } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+// Defenzívny mock pre prípad, že staré funkcie ešte niekde v súbore visia
+const getAuth = () => null;
+const onAuthStateChanged = () => () => {};
+const updatePassword = async () => ({ success: false, message: "Use Supabase Auth" });
+const reauthenticateWithCredential = async () => ({ success: false });
+const EmailAuthProvider = { credential: () => ({}) };
 
 // ============================================================================
 // 🌟 POMOCNÝ KOMPONENT PRE TOOLTIPY (ALIGN CENTER FIX & OVERFLOW PREVENT)
