@@ -153,14 +153,35 @@ export const GlobalFooter = ({
             {/* 📜 SYSTEM LOG BUTTON (ZABUDOVANÉ TLAČIDLO VO FARBE DIMENZIE) */}
             <button
               type="button"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                console.log("⚡ [NEXUS FOOTER]: Kliknutie na System Log triggerované!");
+
+                // 1. Zvuková odozva V20
+                if (typeof window !== "undefined" && window.SoundFX?.click) {
+                  window.SoundFX.click();
+                }
+
+                // 2. Primárny priamy prop
                 if (typeof onOpenSystemLog === "function") {
                   onOpenSystemLog();
-                } else if (typeof onNavigate === "function") {
+                  return;
+                }
+
+                // 3. Sekundárny navigátor
+                if (typeof onNavigate === "function") {
                   onNavigate("system-log");
+                  return;
+                }
+
+                // 4. Globálny záchranný most (ak nie sú prepojené props)
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("nexus-open-system-log"));
+                  window.dispatchEvent(new CustomEvent("nexus-navigate", { detail: "system-log" }));
+                  window.dispatchEvent(new CustomEvent("nexus_open_system_log"));
                 }
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all text-[9px] font-black uppercase tracking-widest hover:scale-[1.03]"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all text-[9px] font-black uppercase tracking-widest hover:scale-[1.03] cursor-pointer"
               style={{
                 backgroundColor: `${themeColor}15`,
                 borderColor: `${themeColor}50`,

@@ -720,6 +720,20 @@ export function App() {
     const handleOpenInboxSignal = () => setIsGlobalMessagesOpen(true);
     const handleOpenQuestAuthSignal = () => setIsQuestAuthOpen(true);
 
+    console.log("⚡ [NEXUS MODAL SYSTEM]: Registrujem V20 poslucháčov vrátane System Logu");
+    const handleOpenSystemLogSignal = () => {
+      console.log("📜 [NEXUS MODAL SYSTEM]: Signál zachytený -> Otváram System Log Modal");
+      if (typeof setIsSystemLogOpen === "function") {
+        setIsSystemLogOpen(true);
+      } else if (typeof setShowSystemLog === "function") {
+        setShowSystemLog(true);
+      }
+    };
+    const handleCloseSystemLogSignal = () => {
+      if (typeof setIsSystemLogOpen === "function") setIsSystemLogOpen(false);
+      if (typeof setShowSystemLog === "function") setShowSystemLog(false);
+    };
+
     // 2. ZATVÁRANIE MODÁLOV (Pre zmazanie activeModal v Hamburger Menu)
     const handleCloseProfilSignal = () => setShowGlobalProfile(false);
     const handleCloseInboxSignal = () => setIsGlobalMessagesOpen(false);
@@ -728,6 +742,8 @@ export function App() {
     window.addEventListener("nexus_open_profil_modal", handleOpenProfilSignal);
     window.addEventListener("nexus_open_inbox_modal", handleOpenInboxSignal);
     window.addEventListener("nexus_open_quest_auth", handleOpenQuestAuthSignal);
+    window.addEventListener("nexus_open_system_log", handleOpenSystemLogSignal);
+    window.addEventListener("nexus_close_system_log", handleCloseSystemLogSignal);
 
     window.addEventListener(
       "nexus_close_profil_modal",
@@ -747,6 +763,15 @@ export function App() {
       window.removeEventListener(
         "nexus_open_quest_auth",
         handleOpenQuestAuthSignal,
+      );
+
+      window.removeEventListener(
+        "nexus_open_system_log",
+        handleOpenSystemLogSignal,
+      );
+      window.removeEventListener(
+        "nexus_close_system_log",
+        handleCloseSystemLogSignal,
       );
 
       window.removeEventListener(
