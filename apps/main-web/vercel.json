@@ -1,0 +1,28 @@
+{
+  "$schema": "[suspicious link removed]",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/subdomeny/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/subdomains/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sub-:match*",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

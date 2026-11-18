@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "paths": {
+      "@shared/*": ["./shared/src/*"],
+      "@main-web/*": ["./apps/main-web/src/*"],
+      "@shop/*": ["./apps/shop/src/*"],
+      "@agency/*": ["../nexus-agency-monorepo_7.2/apps/agency/src/*"],
+      "@uplink/*": ["./apps/uplink/src/*"],
+      "@operators/*": ["./apps/operators/src/*"],
+      "@admin/*": ["./apps/admin/src/*"],
+      "@settings/*": ["./apps/settings/src/*"],
+      "@blog/*": ["./apps/blog/src/*"],
+      "@subdomeny/*": ["../subdomens-monorepo_7.3/apps/subdomeny/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "**/dist"]
+}

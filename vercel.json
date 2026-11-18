@@ -1,0 +1,54 @@
+
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "apps/main-web/dist",
+  "rewrites": [
+    {
+      "source": "/assets/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "agency.projekt-nexus.sk"
+        }
+      ],
+      "destination": "/agency/assets/$1"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "agency.projekt-nexus.sk"
+        }
+      ],
+      "destination": "/agency/$1"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "agency.projekt-nexus.sk"
+        }
+      ],
+      "destination": "/agency/index.html"
+    },
+    { "source": "/sub-00", "destination": "/index.html" },
+    { "source": "/sub-00/(.*)", "destination": "/index.html" },
+    { "source": "/sub-(.*)", "destination": "/index.html" },
+    { "source": "/subdomeny", "destination": "/index.html" },
+    { "source": "/subdomeny/(.*)", "destination": "/index.html" },
+    { "source": "/subdomains", "destination": "/index.html" },
+    { "source": "/subdomains/(.*)", "destination": "/index.html" },
+    { "source": "/agency", "destination": "/agency/index.html" },
+    { "source": "/agency/(.*)", "destination": "/agency/index.html" },
+    { "source": "/shop/(.*)", "destination": "/shop/index.html" },
+    { "source": "/operators/(.*)", "destination": "/operators/index.html" },
+    { "source": "/settings/(.*)", "destination": "/settings/index.html" },
+    { "source": "/admin/(.*)", "destination": "/admin/index.html" },
+    { "source": "/uplink/(.*)", "destination": "/uplink/index.html" },
+    { "source": "/blog/(.*)", "destination": "/blog/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
