@@ -715,18 +715,30 @@ export function App() {
   const [isProfileMaximized, setIsProfileMaximized] = useState(false);
 
   useEffect(() => {
-    // 1. OTVÁRANIE MODÁLOV
+    console.log("⚡ [NEXUS MODAL SYSTEM]: Inicializácia 10s Audio časovača a V20 poslucháčov");
+
+    // 🔊 1. OBNOVA: Automatické vysunutie audio prehrávača po 10 sekundách
+    const audioTimer = setTimeout(() => {
+      console.log("🔊 [NEXUS AUDIO]: 10s uplynulo -> Aktivujem Global Audio Player!");
+      window.dispatchEvent(new CustomEvent("nexus_open_audio_player"));
+      if (typeof setShowAudioPlayer === "function") setShowAudioPlayer(true);
+      if (typeof setIsAudioOpen === "function") setIsAudioOpen(true);
+    }, 10000);
+
+    // 📜 2. OTVÁRANIE MODÁLOV
     const handleOpenProfilSignal = () => setShowGlobalProfile(true);
     const handleOpenInboxSignal = () => setIsGlobalMessagesOpen(true);
     const handleOpenQuestAuthSignal = () => setIsQuestAuthOpen(true);
 
-    console.log("⚡ [NEXUS MODAL SYSTEM]: Registrujem V20 poslucháčov vrátane System Logu");
     const handleOpenSystemLogSignal = () => {
       console.log("📜 [NEXUS MODAL SYSTEM]: Signál zachytený -> Otváram System Log Modal");
       if (typeof setIsSystemLogOpen === "function") {
         setIsSystemLogOpen(true);
       } else if (typeof setShowSystemLog === "function") {
         setShowSystemLog(true);
+      } else {
+        // Fallback: ak state chýba, hľadáme priamy DOM element alebo prepínač
+        console.warn("⚠️ [NEXUS]: setIsSystemLogOpen nie je definovaný ako useState!");
       }
     };
     const handleCloseSystemLogSignal = () => {
@@ -782,6 +794,7 @@ export function App() {
         "nexus_close_inbox_modal",
         handleCloseInboxSignal,
       );
+      clearTimeout(audioTimer);
     };
   }, []);
 
@@ -2223,39 +2236,33 @@ export function App() {
           </div>
         </main>
 
+        {/* 🔊 1. GLOBÁLNY AUDIO PLAYER S 10s ODOZVOU (V20 AKTÍVNY CEZ CELÝ MATRIX) */}
+        <GlobalSystemsAudioPlayer
+          themeColor={themeColor || "#00f0ff"}
+          autoPromptDelay={10000}
+        />
+
+        {/* 📜 2. GLOBÁLNY SYSTEM LOG MODAL (OTVÁRA SA CEZ STAV isSystemLogOpen) */}
+        {isSystemLogOpen && (
+          <SystemLogModal
+            isOpen={isSystemLogOpen}
+            onClose={() => setIsSystemLogOpen(false)}
+            onAcknowledge={() => setIsSystemLogOpen(false)}
+            themeColor={themeColor || "#00f0ff"}
+            buildPushId={
+              typeof NEXUS_GIT_PUSH_ID !== "undefined"
+                ? NEXUS_GIT_PUSH_ID
+                : "OS-GENESIS-V20.95-BUILD"
+            }
+          />
+        )}
+
         {/* ⚡ ZÁKAZ VYKRESLENIA DOMOVSKÉHO FOOTERU NA SYS PORTOCH */}
         {!location.pathname.includes("/ID") &&
           !location.pathname.includes("nexus_") &&
           !location.pathname.includes("video_") &&
           location.pathname !== "/login" && (
             <div className="w-full">
-              {isSystemLogOpen && (
-                <SystemLogModal
-                  isOpen={isSystemLogOpen}
-                  onClose={
-                    typeof handleAcknowledgeSystemLog === "function"
-                      ? handleAcknowledgeSystemLog
-                      : () => setIsSystemLogOpen(false)
-                  }
-                  onAcknowledge={
-                    typeof handleAcknowledgeSystemLog === "function"
-                      ? handleAcknowledgeSystemLog
-                      : () => setIsSystemLogOpen(false)
-                  }
-                  themeColor={themeColor || "#00f0ff"}
-                  buildPushId={
-                    typeof NEXUS_GIT_PUSH_ID !== "undefined"
-                      ? NEXUS_GIT_PUSH_ID
-                      : "OS-GENESIS-V20.95-BUILD"
-                  }
-                />
-              )}
-
-              <GlobalSystemsAudioPlayer
-                themeColor={themeColor || "#00f0ff"}
-                autoPromptDelay={10000}
-              />
-
               <GlobalFooter
                 activeTab={currentSectorFormatted || "HOME"}
                 userTier={userTier || "QUEST"}
@@ -2271,7 +2278,7 @@ export function App() {
                   }
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                onOpenSystemLog={() => setIsLogModalOpen(true)}
+                onOpenSystemLog={() => setIsSystemLogOpen(true)}
               />
             </div>
           )}
