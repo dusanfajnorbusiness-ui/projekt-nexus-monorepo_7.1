@@ -30,8 +30,8 @@ import {
 import { TierBadge } from "@shared/components/TierBadge.jsx";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { GlobalPredFooterNode } from "@main-web/components/GlobalPredFooterNode.jsx";
-
-import { GlobalMediaPlayer } from "@shared/components/legacy-code-components/GlobalMediaPlayer.jsx";
+// 👑 V20 SSOT: Centrálny multimediálny prehrávač pre dimenzie (Audio + Video)
+import { GlobalMediaPlayerDIM } from "@shared/components/GlobalMediaPlayerDIM.jsx";
 import MetaTags from "@shared/components/MetaTags.jsx";
 import { DMLTooltip } from "@shared/components/DMLTooltip.jsx";
 
@@ -538,8 +538,6 @@ const localLexikon = {
   },
 };
 
-
-
 // =====================================================================
 // 👑 HLAVNÝ KOMPONENT UZLA ID00_NODE_01 (ILÚZIA VEDOMIA)
 // =====================================================================
@@ -857,25 +855,46 @@ export default function Node_ID00_01() {
           </div>
         </section>
 
-        {/* =====================================================================
-            4. GlobalNodeVideo (Video Injektor)
-            ===================================================================== */}
+        {/* ===================================================================== */}
+        {/* 4. CENTRÁLNY MULTIMEDIÁLNY MATRIX (AUDIO & VIDEO STREAM HUB V20)      */}
+        {/* Súbor: GlobalMediaPlayerDIM.jsx (SSOT 16 DIM × 6 STUDIOS + 4AP + 2VP) */}
+        {/* Status: 100% OPERATIONAL // ZERO HARDCODE // ZERO CRASH               */}
+        {/* ===================================================================== */}
         <section
-          className={`mb-12 rounded-xl overflow-hidden border-2 border-[#FFFFFF]/30 shadow-lg relative z-20 ${cardBg}`}
+          className="mb-12 rounded-xl overflow-hidden border-2 shadow-lg relative z-20 bg-[#050A0E]/90 backdrop-blur-md"
+          style={{
+            borderColor: `${DIM_COLOR}40`,
+            boxShadow: `0 0 20px ${DIM_COLOR}15`,
+          }}
         >
+          {/* HLAVIČKA UZLA S DYNAMICKOU TELEMETRIOU */}
           <div className="bg-[#050A0E] py-2 px-4 border-b border-gray-800 flex justify-between items-center text-xs">
-            <span className="text-[#FFFFFF] font-bold font-mono uppercase tracking-widest flex items-center gap-2">
-              <PlayCircle className="w-4 h-4 text-[#FFFFFF]" />
-              GlobalNodeVideo: Video Injektor
+            <span
+              className="font-bold font-mono uppercase tracking-widest flex items-center gap-2"
+              style={{ color: DIM_COLOR }}
+            >
+              <PlayCircle className="w-4 h-4" style={{ color: DIM_COLOR }} />
+              Centrálny Multimediálny Matrix: {NODE_ID}
             </span>
-            <span className="text-gray-500 font-mono text-[10px]">
-              id00_node_01_iluzia_vedomia
+            <span className="text-gray-400 font-mono text-[10px] flex items-center gap-1.5">
+              <span
+                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                style={{
+                  backgroundColor: DIM_COLOR,
+                  boxShadow: `0 0 8px ${DIM_COLOR}`,
+                }}
+              />
+              MATRIX V20.95 // LIVE STREAM
             </span>
           </div>
-          <GlobalNodeVideo
-            nodeId="id00_node_01_iluzia_vedomia"
-            dimColor="cyan"
-          />
+
+          {/* OSTRÝ INJEKTOR PREHRÁVAČA — 100% DYNAMICKÉ PREPOJENIE */}
+          <div className="p-2 sm:p-4 bg-black/60 backdrop-blur-md">
+            <GlobalMediaPlayerDIM
+              initialDimension={String(NODE_ID || "").split("-") || "ID00"}
+              dimColor={DIM_COLOR}
+            />
+          </div>
         </section>
 
         {/* Navigation Tabs for Chat vs. Simulator */}

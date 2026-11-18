@@ -6,6 +6,8 @@
 // odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
 // komponent "OfflineDimensionPreview" umiestnený pod tým.
 import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
+import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { id08OmegaMap as ID08_Map } from "@main-web/data/ID08_OmegaMap.js";
 import { BookOpen, Database, Lock } from "lucide-react";
 

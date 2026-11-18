@@ -39,18 +39,17 @@ const formatYouTubeEmbedUrl = (rawUrl) => {
   if (cleanUrl.length === 11 && !cleanUrl.includes("/") && !cleanUrl.includes(".")) {
     videoId = cleanUrl;
   } else if (cleanUrl.includes("youtu.be/")) {
-    const afterSlash = cleanUrl.split("youtu.be/") || "";
-    videoId = afterSlash.split("?") || "";
+    const match = cleanUrl.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    videoId = match ? match : "";
   } else if (cleanUrl.includes("youtube.com/shorts/")) {
-    const afterSlash = cleanUrl.split("youtube.com/shorts/") || "";
-    videoId = afterSlash.split("?") || "";
+    const match = cleanUrl.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+    videoId = match ? match : "";
   } else if (cleanUrl.includes("youtube.com/watch")) {
-    const queryStr = cleanUrl.split("?") || "";
-    const urlParams = new URLSearchParams(queryStr);
-    videoId = urlParams.get("v") || "";
+    const match = cleanUrl.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    videoId = match ? match : "";
   } else if (cleanUrl.includes("/embed/")) {
-    const afterEmbed = cleanUrl.split("/embed/") || "";
-    videoId = afterEmbed.split("?") || "";
+    const match = cleanUrl.match(/embed\/([a-zA-Z0-9_-]{11})/);
+    videoId = match ? match : "";
   } else {
     videoId = cleanUrl;
   }
@@ -74,12 +73,20 @@ const MEDIA_SWITCHES = [
 ];
 
 export const GlobalMediaPlayerDIM = ({
+  initialDimension,
   initialDimId = "ID00",
+  dimColor = null,
   onClose = null,
   mode = "default",
   className = "",
 }) => {
-  const [activeDimId, setActiveDimId] = useState(initialDimId);
+  // Bezpečne vytiahne ID dimenzie nech príde: "ID01", "ID01-01", ["ID01", "01"] alebo cez initialDimension / initialDimId
+  const rawInput = initialDimension !== undefined ? initialDimension : initialDimId;
+  const parsedDimId = Array.isArray(rawInput)
+    ? String(rawInput || "ID00")
+    : String(rawInput || "ID00").split("-");
+
+  const [activeDimId, setActiveDimId] = useState(parsedDimId);
   const [activeTrackKey, setActiveTrackKey] = useState("VP-V");
   const [clickCount, setClickCount] = useState(0);
   const [playTimeSeconds, setPlayTimeSeconds] = useState(0);

@@ -7,6 +7,8 @@
 // komponent "OfflineDimensionPreview" umiestnený pod tým.
 
 import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
+import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { id06OmegaMap as ID06_Map } from "@main-web/data/ID06_OmegaMap.js";
 import { Cpu, Database, Lock } from "lucide-react";
 

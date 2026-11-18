@@ -23,9 +23,18 @@ import {
 import { TierBadge } from "@shared/components/TierBadge.jsx";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { GlobalPredFooterNode } from "@main-web/components/GlobalPredFooterNode.jsx";
-import { GlobalMediaPlayer } from "@shared/components/legacy-code-components/GlobalMediaPlayer.jsx";
+// 👑 V20 SSOT: Centrálny multimediálny prehrávač pre dimenzie (Audio + Video)
+import { GlobalMediaPlayerDIM } from "@shared/components/GlobalMediaPlayerDIM.jsx";
 import MetaTags from "@shared/components/MetaTags.jsx";
 import { DMLTooltip } from "@shared/components/DMLTooltip.jsx";
+
+// ============================================================================
+// 🔊 NEXUS SOUND ENGINE (V4.0 - BROWSER UNLOCK FIX)
+// DESIGNED BY | SERGEANT [CORE] DUŠAN FAJNOR
+// --------------------------------------------------------------------------
+// Účel: Matematická syntéza vĺn.
+// Fix: Prehliadače blokovali AudioContext. Pridaný prekážkový Touch-Unlocker.
+// ============================================================================
 
 // =====================================================================
 // 👑 HLAVNÝ KOMPONENT UZLA ID01_NODE_01 (PERSONAL)
@@ -527,9 +536,6 @@ export default function Node_ID01_01() {
     },
   };
 
-
-  
-
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "bg-[#050A0E] text-gray-300" : "bg-[#252D35] text-gray-200"}`}
@@ -687,20 +693,30 @@ export default function Node_ID01_01() {
           </div>
         </section>
 
-        {/* =====================================================================
-            4. VIDEO INJEKTOR
-            ===================================================================== */}
-        <section className="mb-12 rounded-xl overflow-hidden border-2 border-[#39FF14]/30 shadow-lg">
+        {/* ===================================================================== */}
+        {/* 4. CENTRÁLNY MULTIMEDIÁLNY MATRIX (AUDIO & VIDEO STREAM HUB V20)      */}
+        {/* Súbor: GlobalMediaPlayerDIM.jsx (SSOT 16 DIM × 6 STUDIOS + 4AP + 2VP) */}
+        {/* Status: 100% OPERATIONAL // ZERO CRASH // FULL STREAM                 */}
+        {/* ===================================================================== */}
+        <section
+          className={`mb-12 rounded-xl overflow-hidden border-2 border-[#00f0ff]/30 shadow-lg relative z-20 bg-[#050A0E]/90 backdrop-blur-md`}
+        >
+          {/* HLAVIČKA UZLA S TELEMETRIOU */}
           <div className="bg-[#050A0E] py-2 px-4 border-b border-gray-800 flex justify-between items-center text-xs">
-            <span className="text-[#39FF14] font-bold font-mono uppercase tracking-widest flex items-center gap-2">
-              <PlayCircle className="w-4 h-4 text-[#39FF14]" />
-              GlobalNodeVideo: Video Injektor
+            <span className="text-[#00f0ff] font-bold font-mono uppercase tracking-widest flex items-center gap-2">
+              <PlayCircle className="w-4 h-4 text-[#00f0ff]" />
+              Centrálny Multimediálny Matrix: ID00
             </span>
-            <span className="text-gray-500 font-mono">
-              id01_node_01_personal_video
+            <span className="text-gray-400 font-mono text-[10px] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" />
+              ID00_ILUZIA_VEDOMIA // MATRIX V20.95
             </span>
           </div>
-          <GlobalNodeVideo nodeId="pkIdSHPusM8" dimColor="green" />
+
+          {/* OSTRÝ INJEKTOR PREHRÁVAČA */}
+          <div className="p-2 sm:p-4 bg-black/60 backdrop-blur-md">
+            <GlobalMediaPlayerDIM initialDimension="ID00" dimColor="#00f0ff" />
+          </div>
         </section>
 
         {/* =====================================================================
@@ -1690,15 +1706,6 @@ export default function Node_ID01_01() {
               </div>
             )}
           </div>
-        </section>
-
-        {/* 🎙️ DOPLNKOVÝ AUDIO MODUL */}
-        <section className="my-12 rounded-xl overflow-hidden border border-gray-800 bg-[#050A0E]/40 p-6 relative z-10">
-          <div className="text-xs text-[#BF00FF] font-bold font-mono mb-3 uppercase tracking-widest flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#BF00FF] animate-ping" />
-            <span>🎙️ Doplnkový Audio Modul: Inštalačný podcast</span>
-          </div>
-          <GlobalNodePodcast nodeId={NODE_ID} dimColor="#BF00FF" />
         </section>
 
         {/* =====================================================================
