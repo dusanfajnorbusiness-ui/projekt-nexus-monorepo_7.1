@@ -685,8 +685,33 @@ export function App() {
     const isAdminSub =
       typeof getIsAdminSubdomain === "function" ? getIsAdminSubdomain() : false;
 
-    if (isAdminSub || path.includes("/uplink")) {
-      setActiveTab("uplink");
+    const DIM_COLORS = {
+      id00: "#FFFFFF",
+      id01: "#39FF14",
+      id02: "#FFEB3B",
+      id03: "#FFD700",
+      id04: "#FFAA00",
+      id05: "#FF8C00",
+      id06: "#BF00FF",
+      id07: "#8A2BE2",
+      id08: "#00F3FF",
+      id09: "#FF003C",
+      id10: "#0044FF",
+      id11: "#FFBF00",
+      id12: "#00E5FF",
+      id13: "#00008B",
+      id14: "#FF1493",
+      id15: "#8A8A8A",
+    };
+
+    // Detekujeme celé ID dimenzie id00 až id15 a vytiahneme čistý string
+    const match = path.match(/id(?:0|1)/);
+    const matchedDim = match ? match : null;
+
+    if (matchedDim && DIM_COLORS[matchedDim]) {
+      setActiveTab(matchedDim);
+      setThemeColor(DIM_COLORS[matchedDim]);
+    } else if (isAdminSub || path.includes("/uplink")) {
       setThemeColor("#8A2BE2");
     } else if (path.includes("/home") || path === "/") {
       setActiveTab("home");
@@ -715,11 +740,25 @@ export function App() {
   const [isProfileMaximized, setIsProfileMaximized] = useState(false);
 
   useEffect(() => {
-    console.log("⚡ [NEXUS MODAL SYSTEM]: Inicializácia 10s Audio časovača a V20 poslucháčov");
+    console.log(
+      "⚡ [NEXUS MODAL SYSTEM]: Inicializácia 10s Audio časovača a V20 poslucháčov",
+    );
+
+    const handleThemeSync = (event) => {
+      if (event?.detail?.themeColor) {
+        setThemeColor(event.detail.themeColor);
+      }
+      if (event?.detail?.activeTab) {
+        setActiveTab(event.detail.activeTab);
+      }
+    };
+    window.addEventListener("nexus_theme_change", handleThemeSync);
 
     // 🔊 1. OBNOVA: Automatické vysunutie audio prehrávača po 10 sekundách
     const audioTimer = setTimeout(() => {
-      console.log("🔊 [NEXUS AUDIO]: 10s uplynulo -> Aktivujem Global Audio Player!");
+      console.log(
+        "🔊 [NEXUS AUDIO]: 10s uplynulo -> Aktivujem Global Audio Player!",
+      );
       window.dispatchEvent(new CustomEvent("nexus_open_audio_player"));
       if (typeof setShowAudioPlayer === "function") setShowAudioPlayer(true);
       if (typeof setIsAudioOpen === "function") setIsAudioOpen(true);
@@ -731,14 +770,18 @@ export function App() {
     const handleOpenQuestAuthSignal = () => setIsQuestAuthOpen(true);
 
     const handleOpenSystemLogSignal = () => {
-      console.log("📜 [NEXUS MODAL SYSTEM]: Signál zachytený -> Otváram System Log Modal");
+      console.log(
+        "📜 [NEXUS MODAL SYSTEM]: Signál zachytený -> Otváram System Log Modal",
+      );
       if (typeof setIsSystemLogOpen === "function") {
         setIsSystemLogOpen(true);
       } else if (typeof setShowSystemLog === "function") {
         setShowSystemLog(true);
       } else {
         // Fallback: ak state chýba, hľadáme priamy DOM element alebo prepínač
-        console.warn("⚠️ [NEXUS]: setIsSystemLogOpen nie je definovaný ako useState!");
+        console.warn(
+          "⚠️ [NEXUS]: setIsSystemLogOpen nie je definovaný ako useState!",
+        );
       }
     };
     const handleCloseSystemLogSignal = () => {
@@ -755,7 +798,10 @@ export function App() {
     window.addEventListener("nexus_open_inbox_modal", handleOpenInboxSignal);
     window.addEventListener("nexus_open_quest_auth", handleOpenQuestAuthSignal);
     window.addEventListener("nexus_open_system_log", handleOpenSystemLogSignal);
-    window.addEventListener("nexus_close_system_log", handleCloseSystemLogSignal);
+    window.addEventListener(
+      "nexus_close_system_log",
+      handleCloseSystemLogSignal,
+    );
 
     window.addEventListener(
       "nexus_close_profil_modal",
@@ -1443,22 +1489,7 @@ export function App() {
         /* ⚡ GLOBÁLNY RADAR OFFSET: Zastaví scroll 150px pred nadpisom */
         [id^="nexus-"] { scroll-margin-top: 150px; }
     `}</style>
-        {/* ⚡ INJEKTÁŽ RÝCHLEHO NAVIGAČNÉHO UZLA (CHAMELEÓN) ⚡ */}
-        {/* ⚡ ABSOLÚTNA KARANTÉNA: NA LOGINE VYPÍNAME GLOBÁLNE MENU */}
-        {location.pathname !== "/login" && (
-          <div
-            className={`relative z-50 pointer-events-none transition-all duration-300 ${showGlobalProfile ? "opacity-0 invisible" : "opacity-100 visible"}`}
-          >
-            <div className="pointer-events-auto">
-              <GlobalHamburgerMenu
-                activeTab={activeTab}
-                themeColor={themeColor}
-              />
-              {/* 📡 DÁTOVÝ MOST: Posielame identitu priamo do motora pre overenie v Ústave */}
-              <GlobalComponents themeColor={themeColor} userState={userState} />
-            </div>
-          </div>
-        )}
+
         <GlobalProfil
           isOpen={showGlobalProfile}
           onClose={() => {
@@ -2236,13 +2267,65 @@ export function App() {
           </div>
         </main>
 
-        {/* 🔊 1. GLOBÁLNY AUDIO PLAYER S 10s ODOZVOU (V20 AKTÍVNY CEZ CELÝ MATRIX) */}
+        {/* ==================================================================== */}
+        {/* 1. 📑 GLOBÁLNA PÄTIČKA (FOOTER)                                      */}
+        {/* Podmienka: Skrytý na dimenziách /id*, systémových portoch a logine    */}
+        {/* (Dimenzie ID00-ID15 používajú vlastný nakalibrovaný GlobalDimensionHub)*/}
+        {/* ==================================================================== */}
+        {!location.pathname.includes("nexus_") &&
+          !location.pathname.includes("video_") &&
+          location.pathname !== "/login" && (
+            <footer className="w-full relative z-10">
+              <GlobalFooter
+                activeTab={activeTab || "id08"}
+                userTier={userTier || "QUEST"}
+                themeColor={themeColor || "#00F3FF"}
+                onNavigate={(route) => {
+                  const targetRoute = route.startsWith("/") ? route : `/${route}`;
+                  if (typeof navigate === "function") navigate(targetRoute);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onOpenSystemLog={() => setIsSystemLogOpen(true)}
+              />
+            </footer>
+          )}
+
+        {/* ==================================================================== */}
+        {/* 2. 🛸 PLÁVAJÚCE UI: HAMBURGER MENU & LASER SCANNER / VIZUÁLNE EFEKTY */}
+        {/* ==================================================================== */}
+        {location.pathname !== "/login" && (
+          <aside
+            aria-label="Nexus Navigation Layer"
+            className={`fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 ${
+              showGlobalProfile ? "opacity-0 invisible" : "opacity-100 visible"
+            }`}
+          >
+            <div className="pointer-events-auto">
+              <GlobalHamburgerMenu
+                activeTab={activeTab}
+                themeColor={themeColor}
+              />
+              <GlobalComponents
+                themeColor={themeColor}
+                userState={userState}
+              />
+            </div>
+          </aside>
+        )}
+
+        {/* ==================================================================== */}
+        {/* 3. 🔊 GLOBÁLNY AUDIO ENGINE S 10s ODOZVOU (MATRIX AMBIENT & FX)       */}
+        {/* Trvalo aktívny cez celé monorepo s reaktívnou synchronizáciou farby  */}
+        {/* ==================================================================== */}
         <GlobalSystemsAudioPlayer
           themeColor={themeColor || "#00f0ff"}
           autoPromptDelay={10000}
         />
 
-        {/* 📜 2. GLOBÁLNY SYSTEM LOG MODAL (OTVÁRA SA CEZ STAV isSystemLogOpen) */}
+        {/* ==================================================================== */}
+        {/* 4. 📜 SYSTÉMOVÝ AUDIT LOG (DIAGNOSTICKÝ MODAL CEZ STATE)             */}
+        {/* Najvyššia úroveň správy relácie s automatickým Git Push ID overením */}
+        {/* ==================================================================== */}
         {isSystemLogOpen && (
           <SystemLogModal
             isOpen={isSystemLogOpen}
@@ -2256,34 +2339,9 @@ export function App() {
             }
           />
         )}
-
-        {/* ⚡ ZÁKAZ VYKRESLENIA DOMOVSKÉHO FOOTERU NA SYS PORTOCH */}
-        {!location.pathname.includes("/ID") &&
-          !location.pathname.includes("nexus_") &&
-          !location.pathname.includes("video_") &&
-          location.pathname !== "/login" && (
-            <div className="w-full">
-              <GlobalFooter
-                activeTab={currentSectorFormatted || "HOME"}
-                userTier={userTier || "QUEST"}
-                themeColor={themeColor || "#00f0ff"}
-                onNavigate={(route) => {
-                  const targetRoute = route.startsWith("/")
-                    ? route
-                    : `/${route}`;
-                  if (typeof navigate === "function") {
-                    navigate(targetRoute);
-                  } else if (typeof navigateTo === "function") {
-                    navigateTo(targetRoute);
-                  }
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                onOpenSystemLog={() => setIsSystemLogOpen(true)}
-              />
-            </div>
-          )}
       </div>
     </HelmetProvider>
   );
 }
+
 export default App;

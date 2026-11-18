@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id14OmegaMap as ID14_Map } from "@main-web/data/ID14_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id14OmegaMap as ID14_Map } from "@main-web/data/ID14_OmegaMap.js";
-import { Database, Lock, Radio } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID14) - NEXUS-BLOG [100 NODES READY / PENDING] ---
@@ -241,43 +240,43 @@ const NODE_COMPONENTS = {
   // "ID14-100": Node_ID14_100, // [OMEGA]
 };
 
-// export default function ID14_NexusBlog() {
-//   return (
-//     <>
-// <MetaTags
-//   title="NEXUS-BLOG: Diskusné Fórum, IT Komunita a Osobný Rozvoj | NEXUS OS"
-//   description="Uniknite algoritmickému šumu. NEXUS-BLOG je otvorená komunikačná sieť, diskusné fórum a verejný denník pre tvorcov hľadajúcich čistú prežitú pravdu a osobný rast."
-//   image="https://projekt-nexus.sk/img-nexus/dimenzie/id14-nexus-blog.jpg"
-//   color="#FF1493"
-//   url="https://projekt-nexus.sk/ID14"
-//   ogTitle="NEXUS-BLOG: Bežné siete ti pália RAM. Pripoj sa do našej komunity"
-//   ogDescription="Algoritmy ti kradnú pozornosť a zahlcujú tvoj systém toxickým šumom. Zastav tento Error. Vstúp do našej otvorenej siete, diskutuj s operátormi a sťahuj čisté dáta bez balastu."
-//   twitterTitle="NEXUS-BLOG: Bežné siete ti pália RAM. Pripoj sa do našej komunity"
-//   twitterDescription="Algoritmy ti kradnú pozornosť a zahlcujú ťa toxickým šumom. Vstúp do našej otvorenej siete, diskutuj a sťahuj čisté dáta bez balastu."
-// />
+export default function ID14_NexusBlog() {
+  return (
+    <>
+{/* <MetaTags
+  title="NEXUS-BLOG: Diskusné Fórum, IT Komunita a Osobný Rozvoj | NEXUS OS"
+  description="Uniknite algoritmickému šumu. NEXUS-BLOG je otvorená komunikačná sieť, diskusné fórum a verejný denník pre tvorcov hľadajúcich čistú prežitú pravdu a osobný rast."
+  image="https://projekt-nexus.sk/img-nexus/dimenzie/id14-nexus-blog.jpg"
+  color="#FF1493"
+  url="https://projekt-nexus.sk/ID14"
+  ogTitle="NEXUS-BLOG: Bežné siete ti pália RAM. Pripoj sa do našej komunity"
+  ogDescription="Algoritmy ti kradnú pozornosť a zahlcujú tvoj systém toxickým šumom. Zastav tento Error. Vstúp do našej otvorenej siete, diskutuj s operátormi a sťahuj čisté dáta bez balastu."
+  twitterTitle="NEXUS-BLOG: Bežné siete ti pália RAM. Pripoj sa do našej komunity"
+  twitterDescription="Algoritmy ti kradnú pozornosť a zahlcujú ťa toxickým šumom. Vstúp do našej otvorenej siete, diskutuj a sťahuj čisté dáta bez balastu."
+/> */}
 
-// <GlobalDimensionHub
-//   dimensionId="ID14"
-//   dimensionName="NEXUS-BLOG"
-//   dimColor={ID14_Map?.color || "#FF1493"}
-//   customMap={ID14_Map}
-//   nodeComponents={NODE_COMPONENTS}
-// />
-//   );
-// }
+<GlobalDimensionHub
+  dimensionId="ID14"
+  dimensionName="NEXUS-BLOG"
+  dimColor={ID14_Map?.color || "#FF1493"}
+  customMap={ID14_Map}
+  nodeComponents={NODE_COMPONENTS}
+/>
+</>
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#FF1493"; // Deep Pink pre ID14 Nexus-Blog
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
+      
 
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">

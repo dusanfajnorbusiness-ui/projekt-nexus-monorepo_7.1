@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id10OmegaMap as ID10_Map } from "@main-web/data/ID10_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id10OmegaMap as ID10_Map } from "@main-web/data/ID10_OmegaMap.js";
-import { Database, Home, Lock } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID10) - NONIDENTITY-CORE [102 NODES READY / PENDING] ---
@@ -255,46 +254,44 @@ const NODE_COMPONENTS = {
   // "ID10-100": Node_ID10_100, // [OMEGA]
 };
 
-// export default function ID10_NonIdentityCore() {
-//   // console.log("[SYS_LOG]: Renderujem ID10 Hub s mapou:", ID10_Map);
+export default function ID10_NonIdentityCore() {
+  // console.log("[SYS_LOG]: Renderujem ID10 Hub s mapou:", ID10_Map);
 
-//   return (
-//     <>
-//       {/* <MetaTags
-//         title="NONIDENTITY-CORE: Vnútorný pokoj, Wu-wei a Digitálny detox | NEXUS OS"
-//         description="Váš systém je preťažený hlukom Matrixu? NONIDENTITY-CORE je priestor pre digitálny detox, minimalizmus a Wu-wei. Prepnite sa do stavu Tichého svedka a nájdite absolútny pokoj."
-//         image="https://projekt-nexus.sk/img-nexus/dimenzie/id10-nonidentity-core.jpg"
-//         color="#0044FF"
-//         url="https://projekt-nexus.sk/ID10"
-//         ogTitle="NONIDENTITY-CORE: Tvoja myseľ neustále kričí. Vypni ju."
-//         ogDescription="Matrix ťa programuje k neustálemu stresu a výkonu. Zastav túto expanziu. Odomkni protokoly pre Wu-wei, digitálny detox a urob zo svojho domova nepriestrelný firewall pred vonkajším hlukom."
-//         twitterTitle="NONIDENTITY-CORE: Tvoja myseľ neustále kričí. Vypni ju."
-//         twitterDescription="Matrix ťa programuje k neustálemu stresu. Zastav túto expanziu. Odomkni protokoly pre Wu-wei, digitálny detox a urob zo svojho domova nepriestrelný firewall."
-//       /> */}
+  return (
+    <>
+      {/* <MetaTags
+        title="NONIDENTITY-CORE: Vnútorný pokoj, Wu-wei a Digitálny detox | NEXUS OS"
+        description="Váš systém je preťažený hlukom Matrixu? NONIDENTITY-CORE je priestor pre digitálny detox, minimalizmus a Wu-wei. Prepnite sa do stavu Tichého svedka a nájdite absolútny pokoj."
+        image="https://projekt-nexus.sk/img-nexus/dimenzie/id10-nonidentity-core.jpg"
+        color="#0044FF"
+        url="https://projekt-nexus.sk/ID10"
+        ogTitle="NONIDENTITY-CORE: Tvoja myseľ neustále kričí. Vypni ju."
+        ogDescription="Matrix ťa programuje k neustálemu stresu a výkonu. Zastav túto expanziu. Odomkni protokoly pre Wu-wei, digitálny detox a urob zo svojho domova nepriestrelný firewall pred vonkajším hlukom."
+        twitterTitle="NONIDENTITY-CORE: Tvoja myseľ neustále kričí. Vypni ju."
+        twitterDescription="Matrix ťa programuje k neustálemu stresu. Zastav túto expanziu. Odomkni protokoly pre Wu-wei, digitálny detox a urob zo svojho domova nepriestrelný firewall."
+      /> */}
 
-//       <GlobalDimensionHub
-//         dimensionId="ID10"
-//         dimensionName="NONIDENTITY-CORE"
-//         dimColor={ID10_Map?.color || "#0044FF"}
-//         customMap={ID10_Map}
-//         nodeComponents={NODE_COMPONENTS}
-//       />
-//     </>
-//   );
-// }
+      <GlobalDimensionHub
+        dimensionId="ID10"
+        dimensionName="NONIDENTITY-CORE"
+        dimColor={ID10_Map?.color || "#0044FF"}
+        customMap={ID10_Map}
+        nodeComponents={NODE_COMPONENTS}
+      />
+    </>
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#0044FF"; // Hlboká Modrá pre ID10 NonIdentity-Core
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
       {/* HLAVIČKA (Kompaktná) */}{" "}
       <header className="border-b border-white/10 pb-4">
         {" "}

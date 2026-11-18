@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id12OmegaMap as ID12_Map } from "@main-web/data/ID12_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id12OmegaMap as ID12_Map } from "@main-web/data/ID12_OmegaMap.js";
-import { Database, Lock, Scale } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID12) - NEXUS-CODEX [100 NODES READY / PENDING] ---
@@ -251,44 +250,43 @@ const NODE_COMPONENTS = {
   // "ID12-100": Node_ID12_100, // [OMEGA]
 };
 
-// export default function ID12_NexusCodex() {
-//   return (
-//     <>
-//   <MetaTags
-//     title="NEXUS-CODEX: Ústava Systému, Pravidlá Matrixu a Etika Kódu | NEXUS OS"
-//     description="Váš systém beží v chaose bez hraníc? NEXUS-CODEX je centrálna Ústava vášho Matrixu. Zadefinujte logické zákony, VOP a etiku operovania v Sieti pre udržanie absolútnej kontroly."
-//     image="https://projekt-nexus.sk/img-nexus/dimenzie/id12-nexus-codex.jpg"
-//     color="#00E5FF"
-//     url="https://projekt-nexus.sk/ID12"
-//     ogTitle="NEXUS-CODEX: Tvoj systém sa rúca. Odomkni kybernetickú Ústavu"
-//     ogDescription="Žiješ v chaose, pretože tvojmu systému chýbajú exaktné hranice. Zastav tento Error. Odomkni NEXUS-CODEX, zaveď prísne logické zákony a chráň svoje jadro pred toxickým kódom z okolia."
-//     twitterTitle="NEXUS-CODEX: Tvoj systém sa rúca. Odomkni kybernetickú Ústavu"
-//     twitterDescription="Žiješ v chaose, pretože tvojmu systému chýbajú hranice. Odomkni NEXUS-CODEX a zaveď prísne logické zákony."
-//   />
+export default function ID12_NexusCodex() {
+  return (
+    <>
+  {/* <MetaTags
+    title="NEXUS-CODEX: Ústava Systému, Pravidlá Matrixu a Etika Kódu | NEXUS OS"
+    description="Váš systém beží v chaose bez hraníc? NEXUS-CODEX je centrálna Ústava vášho Matrixu. Zadefinujte logické zákony, VOP a etiku operovania v Sieti pre udržanie absolútnej kontroly."
+    image="https://projekt-nexus.sk/img-nexus/dimenzie/id12-nexus-codex.jpg"
+    color="#00E5FF"
+    url="https://projekt-nexus.sk/ID12"
+    ogTitle="NEXUS-CODEX: Tvoj systém sa rúca. Odomkni kybernetickú Ústavu"
+    ogDescription="Žiješ v chaose, pretože tvojmu systému chýbajú exaktné hranice. Zastav tento Error. Odomkni NEXUS-CODEX, zaveď prísne logické zákony a chráň svoje jadro pred toxickým kódom z okolia."
+    twitterTitle="NEXUS-CODEX: Tvoj systém sa rúca. Odomkni kybernetickú Ústavu"
+    twitterDescription="Žiješ v chaose, pretože tvojmu systému chýbajú hranice. Odomkni NEXUS-CODEX a zaveď prísne logické zákony."
+  /> */}
 
-//   <GlobalDimensionHub
-//     dimensionId="ID12"
-//     dimensionName="NEXUS-CODEX"
-//     dimColor={ID12_Map?.color || "#00E5FF"}
-//     customMap={ID12_Map}
-//     nodeComponents={NODE_COMPONENTS}
-//   />
-// </>
-//   );
-// }
+  <GlobalDimensionHub
+    dimensionId="ID12"
+    dimensionName="NEXUS-CODEX"
+    dimColor={ID12_Map?.color || "#00E5FF"}
+    customMap={ID12_Map}
+    nodeComponents={NODE_COMPONENTS}
+  />
+</>
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#00E5FF"; // Tyrkysová pre ID12 Nexus-Codex
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
+      
 
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">

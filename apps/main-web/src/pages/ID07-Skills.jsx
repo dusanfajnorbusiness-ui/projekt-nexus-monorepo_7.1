@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id07OmegaMap as ID07_Map } from "@main-web/data/ID07_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id07OmegaMap as ID07_Map } from "@main-web/data/ID07_OmegaMap.js";
-import { Cpu, Database, Lock } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID07) - SKILLS-TREE [100 NODES READY / PENDING] ---
@@ -260,10 +259,12 @@ const NODE_COMPONENTS = {
   // "ID07-100": Node_ID07_100, // [OMEGA]
 };
 
+*/
+
 export default function ID07_SkillsTree() {
   return (
     <>
-      <MetaTags 
+      {/* <MetaTags 
         title="SKILLS-TREE: IT Zručnosti, Programovanie a Web Development | NEXUS OS"
         description="Vybudujte si expertnú maticu IT zručností. SKILLS-TREE je priestor pre profesionálny web development, programovanie (React, Tailwind, SQL) a softvérové inžinierstvo. Získajte tvrdé hard-skills."
         image="https://projekt-nexus.sk/img-nexus/dimenzie/id07-skills-tree.jpg"
@@ -273,8 +274,8 @@ export default function ID07_SkillsTree() {
         ogDescription="Zasekol si sa v Tutorial Hell? Sledovanie cudzích videí z teba programátora neurobí. Odomkni svoj technologický strom, získaj tvrdé IT zručnosti a začni fyzicky kódovať vlastnú realitu."
         twitterTitle="SKILLS-TREE: Prestaň hľadať návody. Staň sa Architektom kódu"
         twitterDescription="Sledovanie cudzích videí z teba programátora neurobí. Odomkni svoj technologický strom, získaj tvrdé IT zručnosti a začni kódovať realitu."
-      />
-      
+      /> */}
+
       <GlobalDimensionHub
         dimensionId="ID07"
         dimensionName="SKILLS-TREE"
@@ -283,21 +284,19 @@ export default function ID07_SkillsTree() {
         nodeComponents={NODE_COMPONENTS}
       />
     </>
-*/
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#8A2BE2"; // Fialová farba pre ID07 Skills-Tree
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
-
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">
         <div className="flex items-center gap-3 mb-2">

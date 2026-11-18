@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id15OmegaMap as ID15_Map } from "@main-web/data/ID15_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id15OmegaMap as ID15_Map } from "@main-web/data/ID15_OmegaMap.js";
-import { Database, Lock, PowerOff } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID15) - DEATH-CORE [100 NODES READY / PENDING] ---
@@ -251,44 +250,43 @@ const NODE_COMPONENTS = {
   // "ID15-100": Node_ID15_100, // [OMEGA]
 };
 
-// export default function ID15_DeathCore() {
-//   return (
-//     <>
-//   <MetaTags
-//     title="DEATH-CORE: Strach zo smrti, Digitálny Testament a Zánik | NEXUS OS"
-//     description="Bojíte sa konečného zániku? DEATH-CORE je priestor pre uloženie vášho digitálneho testamentu, archiváciu mŕtvych projektov a defragmentáciu strachu zo smrti. Návod, ako prijať Format C:."
-//     image="https://projekt-nexus.sk/img-nexus/dimenzie/id15-death-core.jpg"
-//     color="#4A4A4A"
-//     url="https://projekt-nexus.sk/ID15"
-//     ogTitle="DEATH-CORE: Tvoj systém raz čaká Format C:. Si pripravený?"
-//     ogDescription="Strach zo Shutdownu je základný vírus Matrixu. Zbytočne ti spaľuje energiu. Priprav svoj digitálny testament, archivuj mŕtve kódy a nájdi absolútny pokoj v prijatí nevyhnutného konca."
-//     twitterTitle="DEATH-CORE: Tvoj systém raz čaká Format C:. Si pripravený?"
-//     twitterDescription="Strach zo Shutdownu je vírus Matrixu. Priprav svoj digitálny testament, archivuj mŕtve kódy a nájdi mier v prijatí zániku."
-//   />
+export default function ID15_DeathCore() {
+  return (
+    <>
+  {/* <MetaTags
+    title="DEATH-CORE: Strach zo smrti, Digitálny Testament a Zánik | NEXUS OS"
+    description="Bojíte sa konečného zániku? DEATH-CORE je priestor pre uloženie vášho digitálneho testamentu, archiváciu mŕtvych projektov a defragmentáciu strachu zo smrti. Návod, ako prijať Format C:."
+    image="https://projekt-nexus.sk/img-nexus/dimenzie/id15-death-core.jpg"
+    color="#4A4A4A"
+    url="https://projekt-nexus.sk/ID15"
+    ogTitle="DEATH-CORE: Tvoj systém raz čaká Format C:. Si pripravený?"
+    ogDescription="Strach zo Shutdownu je základný vírus Matrixu. Zbytočne ti spaľuje energiu. Priprav svoj digitálny testament, archivuj mŕtve kódy a nájdi absolútny pokoj v prijatí nevyhnutného konca."
+    twitterTitle="DEATH-CORE: Tvoj systém raz čaká Format C:. Si pripravený?"
+    twitterDescription="Strach zo Shutdownu je vírus Matrixu. Priprav svoj digitálny testament, archivuj mŕtve kódy a nájdi mier v prijatí zániku."
+  /> */}
 
-//   <GlobalDimensionHub
-//     dimensionId="ID15"
-//     dimensionName="DEATH-CORE"
-//     dimColor={ID15_Map?.color || "#4A4A4A"}
-//     customMap={ID15_Map}
-//     nodeComponents={NODE_COMPONENTS}
-//   />
-// </>
-//   );
-// }
+  <GlobalDimensionHub
+    dimensionId="ID15"
+    dimensionName="DEATH-CORE"
+    dimColor={ID15_Map?.color || "#4A4A4A"}
+    customMap={ID15_Map}
+    nodeComponents={NODE_COMPONENTS}
+  />
+</>
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#4A4A4A"; // Legacy Šedá pre ID15 Death-Core
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
+      
 
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">

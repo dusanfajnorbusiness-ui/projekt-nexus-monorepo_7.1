@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id11OmegaMap as ID11_Map } from "@main-web/data/ID11_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id11OmegaMap as ID11_Map } from "@main-web/data/ID11_OmegaMap.js";
-import { Activity, Database, Lock } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID11) - THE-RECOVERY [100 NODES READY / PENDING] ---
@@ -251,44 +250,43 @@ const NODE_COMPONENTS = {
   // "ID11-100": Node_ID11_100, // [OMEGA]
 };
 
-// export default function ID11_TheRecovery() {
-//   return (
-//     <>
-//   <MetaTags
-//     title="THE-RECOVERY: Biohacking, Mentálne zdravie a Prevencia vyhorenia | NEXUS OS"
-//     description="Tvoj biologický hardvér hlási kritické vyčerpanie. THE-RECOVERY je servisná zóna pre biohacking spánku, mentálnu hygienu a reštart neurónovej siete po vyhorení. Vráťte svojmu telu výkon."
-//     image="https://projekt-nexus.sk/img-nexus/dimenzie/id11-the-recovery.jpg"
-//     color="#FFBF00"
-//     url="https://projekt-nexus.sk/ID11"
-//     ogTitle="THE-RECOVERY: Tvoj systém padá na vyčerpanie. Odomkni reštart."
-//     ogDescription="Pracovný stres a nespavosť ti pália procesor. Nečakaj na fatálny System Crash. Odomkni protokoly pre biohacking, mentálnu hygienu a vráť svojmu biologickému Skafandru stratený výkon."
-//     twitterTitle="THE-RECOVERY: Tvoj systém padá na vyčerpanie. Odomkni reštart."
-//     twitterDescription="Pracovný stres a nespavosť ti pália procesor. Nečakaj na fatálny System Crash. Odomkni protokoly pre biohacking a mentálnu hygienu."
-//   />
+export default function ID11_TheRecovery() {
+  return (
+    <>
+  {/* <MetaTags
+    title="THE-RECOVERY: Biohacking, Mentálne zdravie a Prevencia vyhorenia | NEXUS OS"
+    description="Tvoj biologický hardvér hlási kritické vyčerpanie. THE-RECOVERY je servisná zóna pre biohacking spánku, mentálnu hygienu a reštart neurónovej siete po vyhorení. Vráťte svojmu telu výkon."
+    image="https://projekt-nexus.sk/img-nexus/dimenzie/id11-the-recovery.jpg"
+    color="#FFBF00"
+    url="https://projekt-nexus.sk/ID11"
+    ogTitle="THE-RECOVERY: Tvoj systém padá na vyčerpanie. Odomkni reštart."
+    ogDescription="Pracovný stres a nespavosť ti pália procesor. Nečakaj na fatálny System Crash. Odomkni protokoly pre biohacking, mentálnu hygienu a vráť svojmu biologickému Skafandru stratený výkon."
+    twitterTitle="THE-RECOVERY: Tvoj systém padá na vyčerpanie. Odomkni reštart."
+    twitterDescription="Pracovný stres a nespavosť ti pália procesor. Nečakaj na fatálny System Crash. Odomkni protokoly pre biohacking a mentálnu hygienu."
+  /> */}
 
-//   <GlobalDimensionHub
-//     dimensionId="ID11"
-//     dimensionName="THE-RECOVERY"
-//     dimColor={ID11_Map?.color || "#FFBF00"}
-//     customMap={ID11_Map}
-//     nodeComponents={NODE_COMPONENTS}
-//   />
-// </>
-//   );
-// }
+  <GlobalDimensionHub
+    dimensionId="ID11"
+    dimensionName="THE-RECOVERY"
+    dimColor={ID11_Map?.color || "#FFBF00"}
+    customMap={ID11_Map}
+    nodeComponents={NODE_COMPONENTS}
+  />
+</>
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#FFBF00"; // Jantárovo Žltá / Zlatá pre ID11 The-Recovery
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
+      
 
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">

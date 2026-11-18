@@ -49,10 +49,10 @@ export const NexusThemePropsProvider = ({ children, defaultSubId = "SUB 00" }) =
       return { id: "SUB 00", isHome: true };
     }
 
-    // Ak URL obsahuje /sub (napr. /sub00, /sub05, /sub-12)
-    if (path.includes("/sub")) {
+    // Ak URL obsahuje /sub (napr. /sub03) ALEBO /id (napr. /id03, /ID03, /id03-05)
+    if (path.includes("/sub") || path.match(/\/id(?:0|1)/)) {
       const num = extractCleanSubNumber(path);
-      return { id: `SUB ${num}`, isHome: false };
+      return { id: `SUB ${num}`, dimId: `ID ${num}`, isHome: false };
     }
 
     return { id: defaultSubId, isHome: true };

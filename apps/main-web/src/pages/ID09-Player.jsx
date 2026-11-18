@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock, Target } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id09OmegaMap as ID09_Map } from "@main-web/data/ID09_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id09OmegaMap as ID09_Map } from "@main-web/data/ID09_OmegaMap.js";
-import { Database, Lock, Target } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID09) - SERGEANT-CORE [100 NODES READY / PENDING] ---
@@ -251,45 +250,42 @@ const NODE_COMPONENTS = {
   // "ID09-100": Node_ID09_100, // [OMEGA]
 };
 
-// export default function ID09_SergeantCore() {
-//   return (
-//     <>
-//       {/* <MetaTags
-//         title="SERGEANT-CORE: CoDM Zombies, Herné Stratégie a Návody | NEXUS OS"
-//         description="Svätyňa Avatara @zombieSergeant. Získajte hardcore herné stratégie, taktické myslenie a speed-run návody pre CoDM Zombies a sériu Final Fantasy. Premeňte hranie na matematickú dominanciu."
-//         image="https://projekt-nexus.sk/img-nexus/dimenzie/id09-sergeant-core.jpg"
-//         color="#FF003C"
-//         url="https://projekt-nexus.sk/ID09"
-//         ogTitle="SERGEANT-CORE: Hráte chaos, nie taktiku. Zmeň to na dominanciu"
-//         ogDescription="Tvoj tím neustále padá. Nemáte damage, nepoznáte rotácie a elitní bossovia vás mažú z mapy. Odomkni hernú svätyňu, získaj exaktný taktický manuál a staň sa architektom výhry."
-//         twitterTitle="SERGEANT-CORE: Hráte chaos, nie taktiku. Zmeň to na dominanciu"
-//         twitterDescription="Tvoj tím neustále padá a chýba vám damage. Odomkni hernú svätyňu @zombieSergeant, získaj hardcore taktiky a staň sa architektom výhry."
-//       /> */}
+export default function ID09_SergeantCore() {
+  return (
+    <>
+      {/* <MetaTags
+        title="SERGEANT-CORE: CoDM Zombies, Herné Stratégie a Návody | NEXUS OS"
+        description="Svätyňa Avatara @zombieSergeant. Získajte hardcore herné stratégie, taktické myslenie a speed-run návody pre CoDM Zombies a sériu Final Fantasy. Premeňte hranie na matematickú dominanciu."
+        image="https://projekt-nexus.sk/img-nexus/dimenzie/id09-sergeant-core.jpg"
+        color="#FF003C"
+        url="https://projekt-nexus.sk/ID09"
+        ogTitle="SERGEANT-CORE: Hráte chaos, nie taktiku. Zmeň to na dominanciu"
+        ogDescription="Tvoj tím neustále padá. Nemáte damage, nepoznáte rotácie a elitní bossovia vás mažú z mapy. Odomkni hernú svätyňu, získaj exaktný taktický manuál a staň sa architektom výhry."
+        twitterTitle="SERGEANT-CORE: Hráte chaos, nie taktiku. Zmeň to na dominanciu"
+        twitterDescription="Tvoj tím neustále padá a chýba vám damage. Odomkni hernú svätyňu @zombieSergeant, získaj hardcore taktiky a staň sa architektom výhry."
+      /> */}
 
-//       <GlobalDimensionHub
-//         dimensionId="ID09"
-//         dimensionName="SERGEANT-CORE"
-//         dimColor={ID09_Map?.color || "#FF003C"}
-//         customMap={ID09_Map}
-//         nodeComponents={NODE_COMPONENTS}
-//       />
-//     </>
-//   );
-// }
+      <GlobalDimensionHub
+        dimensionId="ID09"
+        dimensionName="SERGEANT-CORE"
+        dimColor={ID09_Map?.color || "#FF003C"}
+        customMap={ID09_Map}
+        nodeComponents={NODE_COMPONENTS}
+      />
+    </>
+  );
+}
 
 // // ============================================================================
 // // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // // ============================================================================
 // // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#FF003C"; // Crimson Red pre ID09 Sergeant-Core
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
-
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">
         <div className="flex items-center gap-3 mb-2">
@@ -394,9 +390,6 @@ export default function OfflineDimensionPreview() {
           ))}
         </div>
       </div>
-
-      {/* 3. Globálne Hamburger Menu (Už neviditeľný plynulý plávajúci tón) */}
-      <GlobalHamburgerMenu activeTab="id06" themeColor={dimColor} />
 
       <footer className="pt-10 opacity-20 text-[9px] uppercase tracking-widest text-center">
         DESIGNED BY | SERGEANT [CORE] DUŠAN FAJNOR <br />

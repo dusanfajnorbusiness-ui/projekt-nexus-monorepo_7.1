@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id13OmegaMap as ID13_Map } from "@main-web/data/ID13_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id13OmegaMap as ID13_Map } from "@main-web/data/ID13_OmegaMap.js";
-import { Database, Lock, Repeat } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID13) - NEXUS-HABITS [100 NODES READY / PENDING] ---
@@ -241,42 +240,41 @@ const NODE_COMPONENTS = {
   // "ID13-100": Node_ID13_100, // [OMEGA]
 };
 
-// export default function ID13_NexusHabits() {
-//   return (
-//     <>
-//   <MetaTags
-//     title="NEXUS-HABITS: Budovanie Návykov, Disciplína a Denný Režim | NEXUS OS"
-//     description="Váš deň riadi chaos? NEXUS-HABITS je časová architektúra pre budovanie denných návykov, sebadisciplíny a optimalizáciu času. Premeňte svoje rutiny na nezničiteľné skripty."
-//     image="https://projekt-nexus.sk/img-nexus/dimenzie/id13-nexus-habits.jpg"
-//     color="#00008B"
-//     url="https://projekt-nexus.sk/ID13"
-//     ogTitle="NEXUS-HABITS: Motivácia vždy zlyhá. Spoliehaj sa na Kód."
-//     ogDescription="Tvoj deň riadi chaos. Motivácia je nespoľahlivý externý server, ktorý vždy padne. Odomkni NEXUS-HABITS, naprogramuj si tvrdú disciplínu a urob zo svojich denných rutín nezničiteľné skripty v pozadí."
-//     twitterTitle="NEXUS-HABITS: Motivácia vždy zlyhá. Spoliehaj sa na Kód."
-//     twitterDescription="Tvoj deň riadi chaos. Motivácia je nespoľahlivá. Odomkni NEXUS-HABITS, naprogramuj si tvrdú disciplínu a urob zo svojich rutín nezničiteľné skripty."
-//   />
+export default function ID13_NexusHabits() {
+  return (
+    <>
+  {/* <MetaTags
+    title="NEXUS-HABITS: Budovanie Návykov, Disciplína a Denný Režim | NEXUS OS"
+    description="Váš deň riadi chaos? NEXUS-HABITS je časová architektúra pre budovanie denných návykov, sebadisciplíny a optimalizáciu času. Premeňte svoje rutiny na nezničiteľné skripty."
+    image="https://projekt-nexus.sk/img-nexus/dimenzie/id13-nexus-habits.jpg"
+    color="#00008B"
+    url="https://projekt-nexus.sk/ID13"
+    ogTitle="NEXUS-HABITS: Motivácia vždy zlyhá. Spoliehaj sa na Kód."
+    ogDescription="Tvoj deň riadi chaos. Motivácia je nespoľahlivý externý server, ktorý vždy padne. Odomkni NEXUS-HABITS, naprogramuj si tvrdú disciplínu a urob zo svojich denných rutín nezničiteľné skripty v pozadí."
+    twitterTitle="NEXUS-HABITS: Motivácia vždy zlyhá. Spoliehaj sa na Kód."
+    twitterDescription="Tvoj deň riadi chaos. Motivácia je nespoľahlivá. Odomkni NEXUS-HABITS, naprogramuj si tvrdú disciplínu a urob zo svojich rutín nezničiteľné skripty."
+  /> */}
 
-//   <GlobalDimensionHub
-//     dimensionId="ID13"
-//     dimensionName="NEXUS-HABITS"
-//     dimColor={ID13_Map?.color || "#00008B"}
-//     customMap={ID13_Map}
-//     nodeComponents={NODE_COMPONENTS}
-//   />
-// </>
-//   );
-// }
+  <GlobalDimensionHub
+    dimensionId="ID13"
+    dimensionName="NEXUS-HABITS"
+    dimColor={ID13_Map?.color || "#00008B"}
+    customMap={ID13_Map}
+    nodeComponents={NODE_COMPONENTS}
+  />
+</>
+  );
+}
 
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#1E3A8A"; // Tmavá Modrá pre ID13 Nexus-Habits
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
+      
 
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">

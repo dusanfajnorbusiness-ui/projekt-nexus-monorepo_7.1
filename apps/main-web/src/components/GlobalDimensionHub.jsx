@@ -2,7 +2,7 @@ import { GlobalOfflineNode } from "@main-web/components/GlobalOfflineNode.jsx";
 import nodeStats from "@main-web/data/nodeStats.json";
 // import MetaTags from "./MetaTags";
 // import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
+// import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
 import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 
 // ============================================================================
@@ -32,8 +32,6 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-
 
 // 🛡️ LOKÁLNA MATICA TIERov
 const TIER_VALUES = {
@@ -261,6 +259,21 @@ export const GlobalDimensionHub = ({
   customMap,
   nodeComponents = {},
 }) => {
+
+  React.useEffect(() => {
+    const activeColor = dimColor || "#00FFFF";
+    const tabId = String(dimensionId || "").toLowerCase();
+
+    // 1. Odpálime globálny systémový event pre celú materskú loď App.jsx
+    window.dispatchEvent(
+      new CustomEvent("nexus_theme_change", {
+        detail: { themeColor: activeColor, activeTab: tabId },
+      })
+    );
+
+    console.log(`🌌 [GLOBAL DIMENSION HUB]: Aktivovaná dimenzia ${dimensionId} -> Farba: ${activeColor}`);
+  }, [dimensionId, dimColor]);
+
   const location = useLocation();
   const [userTier, setUserTier] = useState("FREE");
   const [userOc, setUserOc] = useState(0);
@@ -571,6 +584,18 @@ export const GlobalDimensionHub = ({
                 />
               )}
             </div>
+          </div>
+        ) : allNodes.length === 0 ? (
+          <div className="py-12 w-full flex items-center justify-center">
+            <GlobalOfflineNode
+              nodeId={dimensionId}
+              dimColor={finalDimColor}
+              onBack={() => {
+                if (SoundFX && typeof SoundFX.click === "function")
+                  SoundFX.click();
+                window.location.href = "/home";
+              }}
+            />
           </div>
         ) : (
           <div className="py-8 text-left">
@@ -1018,18 +1043,22 @@ export const GlobalDimensionHub = ({
           </div>
         )}
       </div>
-      {/* 1. Lasery, blesky a scroll šípky */}
-      {/* <GlobalComponents dimColor={finalDimColor} themeColor={finalDimColor} /> */}
+
+      {/* 1. Lasery, blesky a scroll šípky vo farbe dimenzie */}
+      {/* <GlobalComponents themeColor={finalDimColor} /> */}
 
       {/* 2. Hamburger výťah nakalibrovaný na aktuálnu dimenziu */}
       <GlobalHamburgerMenu
         activeTab={String(dimensionId || "id00").toLowerCase()}
         themeColor={finalDimColor}
-        dimColor={finalDimColor}
       />
 
       {/* 3. Pätička s VOP a ochranou vo farbe dimenzie */}
-      <GlobalFooter dimColor={finalDimColor} themeColor={finalDimColor} />
+      {/* <GlobalFooter
+        activeTab={String(dimensionId || "id00").toLowerCase()}
+        themeColor={finalDimColor}
+      /> */}
+
       <GlobalPaywallModal
         isOpen={paywallOpen}
         onClose={() => setPaywallOpen(false)}

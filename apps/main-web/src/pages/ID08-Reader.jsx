@@ -1,15 +1,14 @@
 // import MetaTags from "@main-web/components/MetaTags";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { BookOpen, Database, Lock } from "lucide-react";
+
+import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
+
+import { id08OmegaMap as ID08_Map } from "@main-web/data/ID08_OmegaMap.js";
 // ============================================================================
 // 🟢 PRODUKČNÝ KÓD (PRE LOKÁLNE POUŽITIE VO VS CODE A DEPLOYMENT)
 // ============================================================================
-// LOKÁLNE POUŽITIE: Keď budeš chcieť dimenziu spustiť ostro do produkcie,
-// odstráň blokové komentáre (/* a */) v tejto sekcii a zmaž úplne celý
-// komponent "OfflineDimensionPreview" umiestnený pod tým.
-import { GlobalDimensionHub } from "@main-web/components/GlobalDimensionHub.jsx";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
-import { id08OmegaMap as ID08_Map } from "@main-web/data/ID08_OmegaMap.js";
-import { BookOpen, Database, Lock } from "lucide-react";
 
 // ============================================================================
 // --- ONLINE UZLY (ID08) - EMPTY-BOOK [100 NODES READY / PENDING] ---
@@ -251,44 +250,41 @@ const NODE_COMPONENTS = {
   // "ID08-100": Node_ID08_100, // [OMEGA]
 };
 
-// export default function ID08_EmptyBook() {
-//   return (
-//     <>
-//       {/* <MetaTags
-//         title="EMPTY-BOOK: Sémantická knižnica, osobný rozvoj a recenzie | NEXUS OS"
-//         description="Trpíte informačným preťažením? EMPTY-BOOK je sémantická knižnica a databáza 350+ dekomprimovaných kníh (Osho, Tolle, Jung). Naučte sa čítať do hĺbky, odučte sa balast a aplikujte prežitú pravdu do praxe."
-//         image="https://projekt-nexus.sk/img-nexus/dimenzie/id08-empty-book.jpg"
-//         color="#00FFFF"
-//         url="https://projekt-nexus.sk/ID08"
-//         ogTitle="EMPTY-BOOK: Čítaš stovky kníh, no tvoja realita sa nemení"
-//         ogDescription="Máš prečítanú celú knižnicu osobného rozvoja, no tvoj systém stále hlási Error. Trpíš kognitívnym preťažením. Odomkni databázu sémanticky dekomprimovaných mŕtvych kníh. Oduč sa informačný balast a nájdi pravdu v tichu."
-//         twitterTitle="EMPTY-BOOK: Čítaš stovky kníh, no tvoja realita sa nemení"
-//         twitterDescription="Máš prečítanú celú knižnicu, no tvoj systém stále hlási Error. Odomkni databázu sémanticky dekomprimovaných kníh a oduč sa informačný balast."
-//       /> */}
+export default function ID08_EmptyBook() {
+  return (
+    <>
+      {/* <MetaTags
+        title="EMPTY-BOOK: Sémantická knižnica, osobný rozvoj a recenzie | NEXUS OS"
+        description="Trpíte informačným preťažením? EMPTY-BOOK je sémantická knižnica a databáza 350+ dekomprimovaných kníh (Osho, Tolle, Jung). Naučte sa čítať do hĺbky, odučte sa balast a aplikujte prežitú pravdu do praxe."
+        image="https://projekt-nexus.sk/img-nexus/dimenzie/id08-empty-book.jpg"
+        color="#00FFFF"
+        url="https://projekt-nexus.sk/ID08"
+        ogTitle="EMPTY-BOOK: Čítaš stovky kníh, no tvoja realita sa nemení"
+        ogDescription="Máš prečítanú celú knižnicu osobného rozvoja, no tvoj systém stále hlási Error. Trpíš kognitívnym preťažením. Odomkni databázu sémanticky dekomprimovaných mŕtvych kníh. Oduč sa informačný balast a nájdi pravdu v tichu."
+        twitterTitle="EMPTY-BOOK: Čítaš stovky kníh, no tvoja realita sa nemení"
+        twitterDescription="Máš prečítanú celú knižnicu, no tvoj systém stále hlási Error. Odomkni databázu sémanticky dekomprimovaných kníh a oduč sa informačný balast."
+      /> */}
 
-//       <GlobalDimensionHub
-//         dimensionId="ID08"
-//         dimensionName="EMPTY-BOOK"
-//         dimColor={ID08_Map?.color || "#00FFFF"}
-//         customMap={ID08_Map}
-//         nodeComponents={NODE_COMPONENTS}
-//       />
-//     </>
-//   );
-// }
+      <GlobalDimensionHub
+        dimensionId="ID08"
+        dimensionName="EMPTY-BOOK"
+        dimColor={ID08_Map?.color || "#00FFFF"}
+        customMap={ID08_Map}
+        nodeComponents={NODE_COMPONENTS}
+      />
+    </>
+  );
+}
 // ============================================================================
 // 🛑 DOČASNÝ NÁHĽAD (OFFLINE DIMENSION PREVIEW)
 // ============================================================================
 // Tento kód sa zobrazuje, kým je dimenzia zamknutá/offline.
 
-export default function OfflineDimensionPreview() {
+export function OfflineDimensionPreview() {
   const dimColor = "#00FFFF"; // Cyan
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 text-left space-y-6 max-w-5xl mx-auto p-4 md:p-8 font-mono">
-      {/* 1. Globálne audio, efekty a pozadie */}
-      <GlobalComponents themeColor={dimColor} />
-
       {/* HLAVIČKA (Kompaktná) */}
       <header className="border-b border-white/10 pb-4">
         <div className="flex items-center gap-3 mb-2">
@@ -347,8 +343,8 @@ export default function OfflineDimensionPreview() {
 
         {/* Scrollable zoznam */}
         <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-[50vh] min-h-[400px] overflow-y-auto custom-scrollbar">
-          {ID08_Map?.sections?.map((sec) => (
-            <div key={sec.sectionId} className="space-y-4">
+          {ID08_Map?.sections?.map((sec, secIdx) => (
+            <div key={sec.sectionId || secIdx} className="space-y-4">
               <h4
                 className="text-[10px] font-black uppercase tracking-widest pb-2"
                 style={{
@@ -366,7 +362,7 @@ export default function OfflineDimensionPreview() {
 
                   return (
                     <li
-                      key={node.id || `node-\${nodeIdx}`} // 👈 TENTO RIADOK ZMAŽE REACT ERROR
+                      key={node.id || `node-${sec.sectionId}-${nodeIdx}`}
                       className="text-[10px] flex items-start gap-2"
                     >
                       <span
@@ -381,7 +377,7 @@ export default function OfflineDimensionPreview() {
                       </span>
                       <span className="text-zinc-500 leading-tight">
                         <span className="text-zinc-300 font-bold mr-1">
-                          {node.id.split("-")[1]}.
+                          {node.id ? node.id.split("-") : nodeIdx + 1}.
                         </span>
                         {node.title}
                       </span>
@@ -393,14 +389,6 @@ export default function OfflineDimensionPreview() {
           ))}
         </div>
       </div>
-
-      {/* 3. Globálne Hamburger Menu (Už neviditeľný plynulý plávajúci tón) */}
-      <GlobalHamburgerMenu activeTab="id06" themeColor={dimColor} />
-
-      <footer className="pt-10 opacity-20 text-[9px] uppercase tracking-widest text-center">
-        DESIGNED BY | SERGEANT [CORE] DUŠAN FAJNOR <br />
-        PROCESSED BY GEMINI_AI // NEURAL_LINK_V5 <br />© 2026 NEXUS PROTOCOL.
-      </footer>
     </div>
   );
 }
