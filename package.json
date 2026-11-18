@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
-    "firebase": "^13.1.0"
+    "firebase": "^13.4.0"
   }
 }
