@@ -154,7 +154,8 @@ export const NexusDB = {
 
    getSystemLogs: async (limit = 15) => {
     try {
-      const repo = import.meta.env.VITE_GITHUB_REPO || "dusanfajnorbusiness-ui/projekt-nexus-monorepo_7.0";
+      console.log("🔍 [NEXUS DB]: Inicializujem fetch GitHub System Logov pre V20.95...");
+      const repo = import.meta.env.VITE_GITHUB_REPO || "dusanfajnorbusiness-ui/projekt-nexus-monorepo_7.1";
       const token =
         import.meta.env.VITE_GITHUB_TOKEN ||
         import.meta.env.VITE_GH_TOKEN ||
