@@ -9,6 +9,7 @@ import { DIMENSIONS } from "@shared/data/nexusConfig.js";
 import { checkPermission } from "@shared/data/permissionsRegistry.js";
 import { SEO_REGISTRY } from "@shared/data/seoRegistry.js";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
+import { NODE_STATUS_REGISTRY } from "@main-web/data/NodeStatusRegistry.js";
 import { Crown, FileText, Filter, Globe, Grid2X2, LayoutGrid, List, Search, Shield, Target, Terminal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import React from "react";
@@ -386,12 +387,25 @@ export const HomePage = ({
   const filteredItems = useMemo(() => {
     const allItems = [
       ...(DIMENSIONS || [])
-        .filter((d) => d.type === "DIM" || !d.type) // ⚡ OCHRANA: Pustí len hlavné Dimenzie, ignoruje STK (Blog kategórie) a SYS
-        .map((d) => ({
-          ...d,
-          type: "DIMENSION",
-          url: SUBDOMAIN_MAP[d.id] || "projekt-nexus.sk",
-        })),
+        .filter((d) => d.type === "DIM" || !d.type)
+        .map((d) => {
+          const coreKey = `${d.id}_CORE`;
+          const actualOnlineCount = getActualOnlineNodesCount(d.id);
+          
+          // Karta je ONLINE ak je v registri _CORE: "ONLINE" ALEBO má živé uzly > 0
+          const isOnline = 
+            typeof NODE_STATUS_REGISTRY !== "undefined" &&
+            (NODE_STATUS_REGISTRY[coreKey] === "ONLINE" || actualOnlineCount > 0);
+
+          return {
+            ...d,
+            type: "DIMENSION",
+            url: SUBDOMAIN_MAP[d.id] || "projekt-nexus.sk",
+            isOnline: isOnline,
+            status: isOnline ? "ONLINE" : "OFFLINE",
+            onlineNodesCount: actualOnlineCount,
+          };
+        }),
       // 🛡️ Mŕtvy kód "VIDEO_MENTORING" zmazaný. Nasadené nové systémové uzly a ID15.
       {
         id: "ID15",

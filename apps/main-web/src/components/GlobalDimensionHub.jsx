@@ -10,7 +10,7 @@ import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx"
 // ARCHITEKT: PRED NASADENÍM ODKOMENTUJ TIETO ORIGINÁLY A ZMAŽ MOCK BLOK:
 // ============================================================================
 
-import { NODE_STATUS_REGISTRY } from "@shared/data/NodeStatusRegistry.js";
+import { NODE_STATUS_REGISTRY } from "@main-web/data/NodeStatusRegistry.js";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import GlobalPaywallModal from "@shop/components/GlobalPaywallModal.jsx";
 import {
