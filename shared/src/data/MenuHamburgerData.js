@@ -5,181 +5,10 @@
 // Status: 100% GROUNDED // 100% PERFECT SSOT MONOLITH
 // ============================================================================
 
-// 🏰 1. UŽÍVATEĽSKÉ ROZHRANIE A MODÁLY (Rýchle Akcie)
-export const TRIPLE_USER_NAV = [
-  {
-    isDivider: true,
-    label: "🏰 1. UŽÍVATEĽSKÉ ROZHRANIE A MODÁLY \n(Rýchle Akcie)",
-  },
+// 🧠 0A. UŽÍVATEĽSKÉ ROZHRANIE A MODÁLY (Rýchle Akcie)
+export const KOGNITIVE_DIM_NAV = [
 
-  {
-    label: "PROFIL OPERÁTORA",
-    icon: "User",
-    actionTab: "open_profil",
-    url: "/profil",
-  },
-  {
-    label: "INBOX (TERMINÁL SPRÁV)",
-    icon: "Inbox",
-    actionTab: "open_inbox",
-    url: "/messages",
-    requiresAuth: true,
-  },
-];
-
-// 🌍 2. GLOBÁLNA NAVIGATION MATRIX OS GENESIS (Všetky Hlavné Porty)
-export const GLOBAL_NEXUS_NAV = [
-  {
-    isDivider: true,
-    label:
-      "🌍 2. GLOBÁLNA NAVIGATION MATRIX OS GENESIS \n(Všetky Hlavné Porty)",
-  },
-
-  { label: "UPLINK MODAL", icon: "Radio", url: "/login" },
-  { label: "HOME PAGE", icon: "Home", url: "/" },
-  { label: "BLOG PAGE", icon: "BookOpen", url: "/blog" },
-  { label: "OPERÁTORS PAGE", icon: "Users", url: "/operators" },
-  { label: "SETTINGS PAGE", icon: "Settings", url: "/settings" },
-  {
-    label: "⚡ ADMIN TERMINAL",
-    icon: "ShieldAlert",
-    url: "/admin",
-    requiresArchitect: true,
-  },
-];
-
-// 🛍️ 3. MEDIA A AKADÉMIA PORTY OS GENESIS (Obchod a Knižnice)
-export const SHOP_MEDIA_NAV = [
-  {
-    isDivider: true,
-    label: "🛍️ 3. MEDIA A AKADÉMIA PORTY OS GENESIS \n(Obchod a Knižnice)",
-  },
-  { label: "NEXUS SHOP", icon: "ShoppingCart", url: "/shop" },
-  { label: "VIDEOS MEDIA", icon: "Video", url: "/shop/videos" },
-  { label: "AUDIOS MEDIA", icon: "Music", url: "/shop/audios" },
-  { label: "IMAGES MEDIA", icon: "Image", url: "/shop/images" },
-  { label: "DOCUMENTS MEDIA", icon: "FileText", url: "/shop/documents" },
-  { label: "APPS MEDIA", icon: "Grid", url: "/shop/apps" },
-];
-
-// 🚪 4. GLOBÁLNA PÄTKA ODHLÁSENIA (Logout Gateway) A NEXUS AGENCY"
-export const LOGOUT_NEXUS_NAV = [
-  {
-    isDivider: true,
-    label: "🚪 4. GLOBÁLNA PÄTKA ODHLÁSENIA \n(Logout Gateway) A NEXUS AGENCY",
-  },
-  {
-    label: "🏢 NEXUS AGENCY \nFULLSTACK CHIRURGIA",
-    url: "https://agency.projekt-nexus.sk/",
-    icon: "Building2",
-    isExternal: true, // 👈 Identifikátor pre externú doménu
-  },
-  { label: "Odhlásiť sa", icon: "LogOut", url: "/login" },
-];
-
-// 👑 6.  UNIFIKOVANÝ GENERÁTOR TIER NAVIGÁCIE PRE VŠETKÝCH 6 SÚRODENCOV
-export const getTierNav = (siblingPath = "shop") => [
-  { isDivider: true, label: "👑 TIER ÚROVNE" },
-  {
-    label: "VŠETKY TIERY",
-    targetId: "nexus-shop-filters",
-    url: `/shop/${siblingPath}`,
-    icon: "Item",
-  },
-  {
-    label: "FREE TIER",
-    targetId: "nexus-shop-filters",
-    url: `/shop/${siblingPath}?tier=FREE`,
-    icon: "Shield",
-  },
-  {
-    label: "FREEMIUM TIER",
-    targetId: "nexus-shop-filters",
-    url: `/shop/${siblingPath}?tier=FREEMIUM`,
-    icon: "ShieldAlert",
-  },
-  {
-    label: "PROMIUM TIER",
-    targetId: "nexus-shop-filters",
-    url: `/shop/${siblingPath}?tier=PROMIUM`,
-    icon: "Zap",
-  },
-  {
-    label: "OMEGAMIUM TIER",
-    targetId: "nexus-shop-filters",
-    url: `/shop/${siblingPath}?tier=OMEGAMIUM`,
-    icon: "Key",
-  },
-  {
-    label: "MASTERMIUM ARCHITECT",
-    targetId: "nexus-shop-filters",
-    url: `/shop/${siblingPath}?tier=MASTERMIUM`,
-    icon: "Crown",
-  },
-];
-
-export const HAMBURGER_MENU_DATA = {
-  // =============================================================================================
-  // 1. 🍔 Uplink Modal — HAMBURGER MENU DATA (V20 OS GENESIS)
-  // File: src/components/UplinkModal.jsx
-  // =============================================================================================
-  uplink: [
-    { isDivider: true, label: "NEXUS UPLINK" },
-    {
-      label: "OS Genesis Trailer",
-      targetId: "nexus-uplink-trailer",
-      icon: "PlayCircle",
-    },
-    { label: "System Tiers", targetId: "nexus-uplink-tiers", icon: "Layers" },
-    {
-      label: "Bezpečnostný Protokol",
-      targetId: "nexus-uplink-security",
-      icon: "Shield",
-    },
-    ...TRIPLE_USER_NAV,
-    ...GLOBAL_NEXUS_NAV,
-    ...SHOP_MEDIA_NAV,
-    ...LOGOUT_NEXUS_NAV,
-  ],
-
-  // =============================================================================================
-  // 2. 🍔 HomePage — HAMBURGER MENU DATA (V20 OS GENESIS)
-  // File: src/pages/HomePage.jsx
-  // =============================================================================================
-  home: [
-    { isDivider: true, label: "SYSTÉM & PRÁVNE DÁTA" },
-    {
-      label: "Obchodné podmienky",
-      targetId: "nexus-vop-section",
-      icon: "FileText",
-      url: "/vop",
-    },
-    {
-      label: "Ochrana údajov (GDPR)",
-      targetId: "nexus-privacy-section",
-      icon: "Lock",
-      url: "/privacy",
-    },
-    {
-      label: "Filozofia Systému",
-      targetId: "nexus-home-filosophy",
-      icon: "BookOpen",
-      url: "/",
-    },
-    {
-      label: "Bannery & Promo",
-      targetId: "nexus-home-banners",
-      icon: "Sparkles",
-      url: "/",
-    },
-    {
-      label: "Radar & Filtre",
-      targetId: "nexus-home-toolbar",
-      icon: "Filter",
-      url: "/",
-    },
-
-    { isDivider: true, label: "KOGNITÍVNE DIMENZIE (ONLINE: ID00-ID05)" },
+  { isDivider: true, label: "🧠 0A. KOGNITÍVNE DIMENZIE (ONLINE: ID00-ID05)" },
     {
       label: "ID00 | MENTOR-HUB",
       targetId: "nexus-home-ID00",
@@ -276,8 +105,10 @@ export const HAMBURGER_MENU_DATA = {
       icon: "PowerOff",
       url: "/ID15",
     },
-
-    { isDivider: true, label: "SYSTÉMOVÉ UZLY" },
+  ]
+  // ⚡ 0B. UŽÍVATEĽSKÉ ROZHRANIE A MODÁLY (Rýchle Akcie)
+export const SYSTEM_MODUL_NAV = [
+    { isDivider: true, label: "⚡ 0B. SYSTÉMOVÉ UZLY" },
     {
       label: "SYS 01 | VIDEO NODES",
       targetId: "nexus-home-SYS01",
@@ -308,7 +139,199 @@ export const HAMBURGER_MENU_DATA = {
       icon: "HardDrive",
       url: "/sys05-directory",
     },
+       ]
 
+// 🏰 1. UŽÍVATEĽSKÉ ROZHRANIE A MODÁLY (Rýchle Akcie)
+export const TRIPLE_USER_NAV = [
+  {
+    isDivider: true,
+    label: "🏰 1. UŽÍVATEĽSKÉ ROZHRANIE A MODÁLY \n(Rýchle Akcie)",
+  },
+
+  {
+    label: "PROFIL OPERÁTORA",
+    icon: "User",
+    actionTab: "open_profil",
+    url: "/profil",
+  },
+  {
+    label: "INBOX (TERMINÁL SPRÁV)",
+    icon: "Inbox",
+    actionTab: "open_inbox",
+    url: "/messages",
+    requiresAuth: true,
+  },
+];
+
+// 🌍 2. GLOBÁLNA NAVIGATION MATRIX OS GENESIS (Všetky Hlavné Porty)
+export const GLOBAL_NEXUS_NAV = [
+  {
+    isDivider: true,
+    label:
+      "🌍 2. GLOBÁLNA NAVIGATION MATRIX OS GENESIS \n(Všetky Hlavné Porty)",
+  },
+
+  { label: "UPLINK MODAL", icon: "Radio", url: "/login" },
+  { label: "HOME PAGE", icon: "Home", url: "/" },
+  { label: "BLOG PAGE", icon: "BookOpen", url: "/blog" },
+  { label: "OPERÁTORS PAGE", icon: "Users", url: "/operators" },
+  { label: "SETTINGS PAGE", icon: "Settings", url: "/settings" },
+  {
+    label: "⚡ ADMIN TERMINAL",
+    icon: "ShieldAlert",
+    url: "/admin",
+    requiresArchitect: true,
+  },
+];
+
+// 🛍️ 3. MEDIA A AKADÉMIA PORTY OS GENESIS (Obchod a Knižnice)
+export const SHOP_MEDIA_NAV = [
+  {
+    isDivider: true,
+    label: "🛍️ 3. MEDIA A AKADÉMIA PORTY OS GENESIS \n(Obchod a Knižnice)",
+  },
+  { label: "NEXUS SHOP", icon: "ShoppingCart", url: "/shop" },
+  { label: "VIDEOS MEDIA", icon: "Video", url: "/shop/videos" },
+  { label: "AUDIOS MEDIA", icon: "Music", url: "/shop/audios" },
+  { label: "IMAGES MEDIA", icon: "Image", url: "/shop/images" },
+  { label: "DOCUMENTS MEDIA", icon: "FileText", url: "/shop/documents" },
+  { label: "APPS MEDIA", icon: "Grid", url: "/shop/apps" },
+];
+
+// 🚪 4. GLOBÁLNA PÄTKA ODHLÁSENIA (Logout Gateway) A NEXUS AGENCY
+export const LOGOUT_NEXUS_NAV = [
+  {
+    isDivider: true,
+    label: "🚪 4. GLOBÁLNA PÄTKA ODHLÁSENIA \n(Logout Gateway) A NEXUS AGENCY",
+  },
+  {
+    label: "🏢 NEXUS AGENCY \nFULLSTACK CHIRURGIA",
+    url: "https://agency.projekt-nexus.sk/",
+    icon: "Building2",
+    isExternal: true,
+  },
+  {
+    label: "🌐 REGISTER SUBDOMÉN \n(OS GENESIS APPS)",
+    url: "https://subdomens.projekt-nexus.sk/",
+    icon: "Globe",
+    isExternal: true,
+  },
+  {
+    label: "🏠 PROJEKT NEXUS \n(HLAVNÁ STROJOVŇA)",
+    url: "https://projekt-nexus.sk/",
+    icon: "Home",
+    isExternal: true,
+  },
+  {
+    label: "🚪 ODHLÁSIŤ SA \n(DISCONNECT MATRIX)",
+    url: "/login",
+    icon: "LogOut",
+    isDanger: true,
+  },
+];
+
+// 👑 6.  UNIFIKOVANÝ GENERÁTOR TIER NAVIGÁCIE PRE VŠETKÝCH 6 SÚRODENCOV
+export const getTierNav = (siblingPath = "shop") => [
+  { isDivider: true, label: "👑 TIER ÚROVNE" },
+  {
+    label: "VŠETKY TIERY",
+    targetId: "nexus-shop-filters",
+    url: `/shop/${siblingPath}`,
+    icon: "Item",
+  },
+  {
+    label: "FREE TIER",
+    targetId: "nexus-shop-filters",
+    url: `/shop/${siblingPath}?tier=FREE`,
+    icon: "Shield",
+  },
+  {
+    label: "FREEMIUM TIER",
+    targetId: "nexus-shop-filters",
+    url: `/shop/${siblingPath}?tier=FREEMIUM`,
+    icon: "ShieldAlert",
+  },
+  {
+    label: "PROMIUM TIER",
+    targetId: "nexus-shop-filters",
+    url: `/shop/${siblingPath}?tier=PROMIUM`,
+    icon: "Zap",
+  },
+  {
+    label: "OMEGAMIUM TIER",
+    targetId: "nexus-shop-filters",
+    url: `/shop/${siblingPath}?tier=OMEGAMIUM`,
+    icon: "Key",
+  },
+  {
+    label: "MASTERMIUM ARCHITECT",
+    targetId: "nexus-shop-filters",
+    url: `/shop/${siblingPath}?tier=MASTERMIUM`,
+    icon: "Crown",
+  },
+];
+
+export const HAMBURGER_MENU_DATA = {
+  // =============================================================================================
+  // 1. 🍔 Uplink Modal — HAMBURGER MENU DATA (V20 OS GENESIS)
+  // File: src/components/UplinkModal.jsx
+  // =============================================================================================
+  uplink: [
+    { isDivider: true, label: "🍔 NEXUS UPLINK" },
+    {
+      label: "OS Genesis Trailer",
+      targetId: "nexus-uplink-trailer",
+      icon: "PlayCircle",
+    },
+    { label: "System Tiers", targetId: "nexus-uplink-tiers", icon: "Layers" },
+    {
+      label: "Bezpečnostný Protokol",
+      targetId: "nexus-uplink-security",
+      icon: "Shield",
+    },
+    
+    ...LOGOUT_NEXUS_NAV,
+  ],
+
+  // =============================================================================================
+  // 2. 🍔 HomePage — HAMBURGER MENU DATA (V20 OS GENESIS)
+  // File: src/pages/HomePage.jsx
+  // =============================================================================================
+  home: [
+    { isDivider: true, label: "SYSTÉM & PRÁVNE DÁTA" },
+    {
+      label: "Obchodné podmienky",
+      targetId: "nexus-vop-section",
+      icon: "FileText",
+      url: "/vop",
+    },
+    {
+      label: "Ochrana údajov (GDPR)",
+      targetId: "nexus-privacy-section",
+      icon: "Lock",
+      url: "/privacy",
+    },
+    {
+      label: "Filozofia Systému",
+      targetId: "nexus-home-filosophy",
+      icon: "BookOpen",
+      url: "/",
+    },
+    {
+      label: "Bannery & Promo",
+      targetId: "nexus-home-banners",
+      icon: "Sparkles",
+      url: "/",
+    },
+    {
+      label: "Radar & Filtre",
+      targetId: "nexus-home-toolbar",
+      icon: "Filter",
+      url: "/",
+    },
+
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -394,6 +417,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "CheckCircle2",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -482,6 +507,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "CheckCircle2",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -570,6 +597,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "DoorOpen",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -658,6 +687,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "Crown",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -746,6 +777,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "DoorOpen",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -834,6 +867,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "Crown",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -922,6 +957,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "CheckCircle2",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1010,6 +1047,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "Award",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1098,6 +1137,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "CheckCircle2",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1186,6 +1227,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "Flag",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1274,6 +1317,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "Sun",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1362,6 +1407,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "Shield",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1450,6 +1497,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "Crown",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1538,6 +1587,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "CheckCircle2",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1626,6 +1677,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "Globe",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1710,6 +1763,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "SEC_J",
     //   icon: "PowerOff",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1777,6 +1832,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "SEC_J",
       icon: "CheckCircle2",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1787,9 +1844,11 @@ export const HAMBURGER_MENU_DATA = {
   // 4A. 🍔 System Modul 01 — HAMBURGER MENU DATA (V20 OS GENESIS)
   // File: src/pages/Sys01_VideoNodes.jsx
   // =============================================================================================
-  sys01: [{ isDivider: true, label: "SYS01-NAVIGÁCIA" }, ...LOGOUT_NEXUS_NAV],
+  // sys01: [{ isDivider: true, label: "SYS01-NAVIGÁCIA" }, ...LOGOUT_NEXUS_NAV],
   sys01_gallery: [
     { isDivider: true, label: "SYS01-NAVIGÁCIA" },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1800,9 +1859,11 @@ export const HAMBURGER_MENU_DATA = {
   // 4B. 🍔 System Modul 02 — HAMBURGER MENU DATA (V20 OS GENESIS)
   // File: src/pages/Sys02_Mentoring.jsx
   // =============================================================================================
-  sys02: [{ isDivider: true, label: "SYS02-NAVIGÁCIA" }, ...LOGOUT_NEXUS_NAV],
+  // sys02: [{ isDivider: true, label: "SYS02-NAVIGÁCIA" }, ...LOGOUT_NEXUS_NAV],
   sys02_gallery: [
     { isDivider: true, label: "SYS02-NAVIGÁCIA" },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1893,6 +1954,8 @@ export const HAMBURGER_MENU_DATA = {
       icon: "Terminal",
       url: "/nexus_img_gallery?cat=SYS",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1979,6 +2042,8 @@ export const HAMBURGER_MENU_DATA = {
       icon: "Terminal",
       url: "/nexus_img_gallery?cat=SYS",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -1988,9 +2053,11 @@ export const HAMBURGER_MENU_DATA = {
   // 4D. 🍔 System Modul 04 — HAMBURGER MENU DATA (V20 OS GENESIS)
   // File: src/pages/Sys04_VideoGallery.jsx
   // =============================================================================================
-  sys04: [{ isDivider: true, label: "SYS04-NAVIGÁCIA" }, ...LOGOUT_NEXUS_NAV],
+  // sys04: [{ isDivider: true, label: "SYS04-NAVIGÁCIA" }, ...LOGOUT_NEXUS_NAV],
   sys04_gallery: [
     { isDivider: true, label: "SYS04-NAVIGÁCIA" },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2052,6 +2119,8 @@ export const HAMBURGER_MENU_DATA = {
       icon: "Terminal",
       url: "/sys05-directory?cat=SYS_NODES",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2108,6 +2177,8 @@ export const HAMBURGER_MENU_DATA = {
       targetId: "nexus-blog-feed-top",
       icon: "MessageSquare",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2158,6 +2229,8 @@ export const HAMBURGER_MENU_DATA = {
       actionTab: "REWARDS",
       icon: "Crown",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2215,6 +2288,8 @@ export const HAMBURGER_MENU_DATA = {
       url: "/shop/shop/cashflow",
     },
     ...getTierNav("shop"),
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2250,6 +2325,8 @@ export const HAMBURGER_MENU_DATA = {
     //   url: "/shop/videos/standby",
     // },
     // ...getTierNav("videos"),
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2279,6 +2356,8 @@ export const HAMBURGER_MENU_DATA = {
     },
 
     ...getTierNav("audios"),
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2302,6 +2381,8 @@ export const HAMBURGER_MENU_DATA = {
     },
 
     ...getTierNav("images"),
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2330,6 +2411,8 @@ export const HAMBURGER_MENU_DATA = {
       icon: "Package",
     },
     ...getTierNav("documents"),
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2364,6 +2447,8 @@ export const HAMBURGER_MENU_DATA = {
       icon: "Laptop",
     },
     ...getTierNav("apps"),
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2458,6 +2543,8 @@ export const HAMBURGER_MENU_DATA = {
       icon: "Users",
       url: "/settings/auth_matrix",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2563,6 +2650,8 @@ export const HAMBURGER_MENU_DATA = {
       actionTab: "LOGS",
       icon: "Terminal",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2606,6 +2695,8 @@ export const HAMBURGER_MENU_DATA = {
     //   targetId: "nexus-profil-activity",
     //   icon: "Activity",
     // },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,
@@ -2642,6 +2733,8 @@ export const HAMBURGER_MENU_DATA = {
       actionTab: "archive",
       icon: "Archive",
     },
+    ...KOGNITIVE_DIM_NAV,
+    ...SYSTEM_MODUL_NAV,
     ...TRIPLE_USER_NAV,
     ...GLOBAL_NEXUS_NAV,
     ...SHOP_MEDIA_NAV,

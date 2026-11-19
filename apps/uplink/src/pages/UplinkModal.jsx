@@ -6,7 +6,6 @@ import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
 import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { supabase } from "@shared/services/NexusDB_Supabase.js";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
-import GlobalUplinkVideo from "@uplink/components/uplink-legacy-code/GlobalUplinkVideo.jsx";
 import { GlobalMediaPlayer } from "@shared/components/legacy-code-components/GlobalMediaPlayer.jsx";
 import {
   Activity,
@@ -40,9 +39,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// ⚡ ZMAZANÝ LOKÁLNY createClient (Aby nevznikali Multiple Instances a Ghost Identity bug)
-
 const CORE_VERSION = "UM-UplinkModal V38.0-PURE-MATRIX-FAST-SCAN";
+const UPLINK_THEME_COLOR = "#A855F7"; // 🎯 Kybernetická fialová pre Uplink portál
 
 // ⚡ VSTAVANÝ TOOLTIP COMPONENT
 export const TooltipHover = ({
@@ -90,8 +88,33 @@ export const TooltipHover = ({
 };
 
 // Odstránené staré props (onUnlock, onViewVop). Zavádzame Bypass navigáciu.
-export const UplinkModal = ({ startMode = "login" }) => {
-  const navigate = useNavigate(); // 🟢 INICIALIZÁCIA NAVIGÁTORA
+export const UplinkModal = ({
+  startMode = "login",
+  onThemeChange,
+  setThemeColor,
+  setActiveTab,
+  userState,
+  userTier: propUserTier,
+}) => {
+  const navigate = useNavigate();
+
+  // 🛡️ V20 DEFENZÍVNE ODVODENIE TIERU (Eliminácia ReferenceError na riadku 1999)
+  const userTier =
+    propUserTier ||
+    (userState && userState.tier) ||
+    (userState && userState.user_metadata && userState.user_metadata.tier) ||
+    "QUEST";
+
+  // 🎯 Kánonické odpálenie farby a tabu do App.jsx
+  useEffect(() => {
+    if (typeof setActiveTab === "function") {
+      setActiveTab("login");
+    }
+    const triggerTheme = onThemeChange || setThemeColor;
+    if (typeof triggerTheme === "function") {
+      triggerTheme(UPLINK_THEME_COLOR);
+    }
+  }, [onThemeChange, setThemeColor, setActiveTab]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -528,19 +551,22 @@ export const UplinkModal = ({ startMode = "login" }) => {
       >
         {/* ⚡⚡⚡ ZAČIATOK OPRAVY: KOMPAKTNÝ SCROLL CONTAINER & GRID NA 1. POHĽAD ⚡⚡⚡ */}
         <div className="w-full max-w-6xl mx-auto flex flex-col justify-center gap-3 lg:gap-4 px-3 py-3 md:px-6 md:py-4 flex-grow shrink-0">
-          
           <div className="w-full flex flex-col lg:flex-row gap-3 lg:gap-6 items-start">
-            
             {/* 🔵 ĽAVÝ STĹPEC (1. & 2. KVADRANT) */}
             <div className="w-full lg:w-1/2 flex flex-col gap-3 shrink-0">
-              
               {/* 1. KVADRANT: MEDIA PLAYER (ID pre Hamburger Výťah) */}
-              <div id="nexus-uplink-trailer" className="w-full rounded-xl overflow-hidden border border-[#00f3ff]/30 bg-black/60 shadow-[0_0_20px_rgba(0,243,255,0.12)] relative">
+              <div
+                id="nexus-uplink-trailer"
+                className="w-full rounded-xl overflow-hidden border border-[#00f3ff]/30 bg-black/60 shadow-[0_0_20px_rgba(0,243,255,0.12)] relative"
+              >
                 <GlobalMediaPlayer mode="inline" mediaId="MANIFESTO_GENESIS" />
               </div>
 
               {/* 2. KVADRANT: CORE ACCESS (ID pre Hamburger Výťah) */}
-              <div id="nexus-uplink-security" className="w-full flex flex-col gap-2">
+              <div
+                id="nexus-uplink-security"
+                className="w-full flex flex-col gap-2"
+              >
                 <h3 className="text-purple-500 font-black uppercase tracking-widest text-xs border-b border-purple-500/20 pb-1 flex items-center gap-2">
                   <Lock size={13} /> Core Access
                 </h3>
@@ -557,16 +583,30 @@ export const UplinkModal = ({ startMode = "login" }) => {
                         >
                           <User size={14} /> Quest Access (Hosť)
                         </button>
-                        <TooltipHover text="Hosťovský prístup do Siete (Anonym)" dimColor="#00FFFF" position="top" />
+                        <TooltipHover
+                          text="Hosťovský prístup do Siete (Anonym)"
+                          dimColor="#00FFFF"
+                          position="top"
+                        />
                       </div>
 
                       <div className="relative py-0.5 flex items-center justify-center">
-                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10"></div></div>
-                        <div className="relative bg-[#050a0e] px-3 text-[8px] text-white/40 uppercase tracking-widest">Administrácia</div>
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-white/10"></div>
+                        </div>
+                        <div className="relative bg-[#050a0e] px-3 text-[8px] text-white/40 uppercase tracking-widest">
+                          Administrácia
+                        </div>
                       </div>
 
                       {/* E-mail & Password Form */}
-                      <form onSubmit={(e) => { e.preventDefault(); handleEmailAuth(); }} className="w-full flex flex-col gap-2">
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleEmailAuth();
+                        }}
+                        className="w-full flex flex-col gap-2"
+                      >
                         <input
                           type="email"
                           value={email}
@@ -590,18 +630,28 @@ export const UplinkModal = ({ startMode = "login" }) => {
                             onClick={() => setShowPassword(!showPassword)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                           >
-                            {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                            {showPassword ? (
+                              <EyeOff size={14} />
+                            ) : (
+                              <Eye size={14} />
+                            )}
                           </button>
                         </div>
 
                         <div className="flex justify-end">
-                          <button type="button" onClick={handlePasswordReset} className="text-[8px] text-white/40 hover:text-purple-400 uppercase font-black tracking-widest transition-colors">
+                          <button
+                            type="button"
+                            onClick={handlePasswordReset}
+                            className="text-[8px] text-white/40 hover:text-purple-400 uppercase font-black tracking-widest transition-colors"
+                          >
                             Zabudol som heslo
                           </button>
                         </div>
 
                         {resetMsg && (
-                          <p className="text-[#39FF14] text-[8px] font-black uppercase tracking-widest text-center animate-pulse">{resetMsg}</p>
+                          <p className="text-[#39FF14] text-[8px] font-black uppercase tracking-widest text-center animate-pulse">
+                            {resetMsg}
+                          </p>
                         )}
 
                         <button
@@ -609,37 +659,64 @@ export const UplinkModal = ({ startMode = "login" }) => {
                           disabled={isLoading}
                           className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest py-2.5 rounded-lg transition-all shadow-[0_0_12px_rgba(168,85,247,0.3)] flex items-center justify-center gap-2 disabled:opacity-50 text-xs"
                         >
-                          {isLoading ? <Activity size={14} className="animate-spin" /> : <><Lock size={13} /> Login / Register</>}
+                          {isLoading ? (
+                            <Activity size={14} className="animate-spin" />
+                          ) : (
+                            <>
+                              <Lock size={13} /> Login / Register
+                            </>
+                          )}
                         </button>
 
                         <p className="text-[7px] text-white/30 text-center uppercase tracking-widest font-mono leading-tight">
                           Vstupom súhlasíte so{" "}
                           <button
                             type="button"
-                            onClick={() => { if (typeof SoundFX !== "undefined" && SoundFX.click) SoundFX.click(); navigate("/vop"); }}
+                            onClick={() => {
+                              if (
+                                typeof SoundFX !== "undefined" &&
+                                SoundFX.click
+                              )
+                                SoundFX.click();
+                              navigate("/vop");
+                            }}
                             className="text-purple-400 hover:text-purple-300 underline transition-colors"
                           >
                             VOP
-                          </button>.
+                          </button>
+                          .
                         </p>
                       </form>
 
                       {/* Mobilný QR Scanner Button */}
                       <div className="relative group/tooltip hover:z- block sm:hidden">
-                        <button onClick={startQRScanner} className="w-full bg-[#39FF14]/5 hover:bg-[#39FF14]/10 text-[#39FF14]/60 hover:text-[#39FF14] font-bold uppercase tracking-widest py-2 rounded-lg transition-all border border-[#39FF14]/10 flex items-center justify-center gap-2 text-[9px]">
+                        <button
+                          onClick={startQRScanner}
+                          className="w-full bg-[#39FF14]/5 hover:bg-[#39FF14]/10 text-[#39FF14]/60 hover:text-[#39FF14] font-bold uppercase tracking-widest py-2 rounded-lg transition-all border border-[#39FF14]/10 flex items-center justify-center gap-2 text-[9px]"
+                        >
                           <QrCode size={11} /> QR Bio-Scan
                         </button>
-                        <TooltipHover text="Biometrický login" dimColor="#39FF14" position="top" />
+                        <TooltipHover
+                          text="Biometrický login"
+                          dimColor="#39FF14"
+                          position="top"
+                        />
                       </div>
                     </div>
                   ) : (
                     /* QR Scanner UI */
                     <div className="w-full flex flex-col items-center animate-in fade-in zoom-in duration-300 py-1 z-50 relative">
                       <h3 className="text-white font-black uppercase tracking-widest text-xs mb-2 flex items-center gap-2">
-                        <Camera size={13} className="text-[#00FFFF]" /> Optický Skener
+                        <Camera size={13} className="text-[#00FFFF]" /> Optický
+                        Skener
                       </h3>
                       <div className="relative w-full aspect-square max-w-[180px] mx-auto rounded-lg overflow-hidden border border-[#00FFFF]/20 shadow-[0_0_30px_rgba(0,255,255,0.15)] bg-black flex items-center justify-center">
-                        <video ref={videoRef} autoPlay playsInline className="absolute inset-0 w-full h-full object-cover scale-[1.02]" />
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          playsInline
+                          className="absolute inset-0 w-full h-full object-cover scale-[1.02]"
+                        />
                         <canvas ref={canvasRef} className="hidden" />
                         <div className="absolute inset-0 z-10 pointer-events-none p-4">
                           <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-[#00FFFF] animate-[corner-tl_2s_ease-in-out_infinite]"></div>
@@ -652,13 +729,30 @@ export const UplinkModal = ({ startMode = "login" }) => {
 
                       {isZoomSupported && (
                         <div className="w-full max-w-[180px] mt-2 flex items-center gap-2 bg-black/60 p-2 rounded-lg border border-[#00FFFF]/20">
-                          <ZoomOut size={14} className="text-gray-400 shrink-0" />
-                          <input type="range" min={zoomSettings.min} max={zoomSettings.max} step={zoomSettings.step} value={zoomSettings.current} onChange={handleZoomChange} className="flex-1 accent-[#00FFFF] h-1 bg-gray-800 rounded-lg cursor-pointer" />
-                          <ZoomIn size={14} className="text-[#00FFFF] shrink-0" />
+                          <ZoomOut
+                            size={14}
+                            className="text-gray-400 shrink-0"
+                          />
+                          <input
+                            type="range"
+                            min={zoomSettings.min}
+                            max={zoomSettings.max}
+                            step={zoomSettings.step}
+                            value={zoomSettings.current}
+                            onChange={handleZoomChange}
+                            className="flex-1 accent-[#00FFFF] h-1 bg-gray-800 rounded-lg cursor-pointer"
+                          />
+                          <ZoomIn
+                            size={14}
+                            className="text-[#00FFFF] shrink-0"
+                          />
                         </div>
                       )}
 
-                      <button onClick={stopQRScanner} className="mt-2 w-full max-w-[180px] bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5">
+                      <button
+                        onClick={stopQRScanner}
+                        className="mt-2 w-full max-w-[180px] bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5"
+                      >
                         <X size={12} /> Prerušiť Skenovanie
                       </button>
                     </div>
@@ -668,8 +762,13 @@ export const UplinkModal = ({ startMode = "login" }) => {
                 {/* Error Box */}
                 {error && (
                   <div className="bg-red-500/10 border border-red-500/30 p-2.5 rounded-lg flex items-start gap-2 mt-1">
-                    <AlertTriangle size={13} className="text-[#FF003C] shrink-0 mt-0.5 animate-bounce" />
-                    <p className="text-[#FF003C] text-[8px] font-black uppercase tracking-widest text-left">{error}</p>
+                    <AlertTriangle
+                      size={13}
+                      className="text-[#FF003C] shrink-0 mt-0.5 animate-bounce"
+                    />
+                    <p className="text-[#FF003C] text-[8px] font-black uppercase tracking-widest text-left">
+                      {error}
+                    </p>
                   </div>
                 )}
               </div>
@@ -677,65 +776,153 @@ export const UplinkModal = ({ startMode = "login" }) => {
 
             {/* 🔴 PRAVÝ STĹPEC (3. & 4. KVADRANT) */}
             <div className="w-full lg:w-1/2 flex flex-col gap-3 shrink-0">
-              
               {/* 3. KVADRANT: SYSTEM TIERS (ID pre Hamburger Výťah) */}
-              <div id="nexus-uplink-tiers" className="w-full flex flex-col gap-1.5">
+              <div
+                id="nexus-uplink-tiers"
+                className="w-full flex flex-col gap-1.5"
+              >
                 <h3 className="text-white font-black uppercase tracking-widest text-xs border-b border-white/10 pb-1 flex items-center gap-2">
                   <Layers size={13} className="text-purple-500" /> System Tiers
                 </h3>
 
                 <div className="grid grid-cols-2 gap-1.5">
                   <div className="flex flex-col p-2 rounded-lg border border-white/20 bg-black/40 hover:bg-white/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-white/70 font-black uppercase tracking-widest text-[9px]">QUEST</span><User size={11} className="text-white/30 group-hover:text-white/70" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Anonymný hosťovský prístup.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-white/70 font-black uppercase tracking-widest text-[9px]">
+                        QUEST
+                      </span>
+                      <User
+                        size={11}
+                        className="text-white/30 group-hover:text-white/70"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Anonymný hosťovský prístup.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#00FFFF]/20 bg-black/40 hover:bg-[#00FFFF]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#00FFFF] font-black uppercase tracking-widest text-[9px]">FREE</span><User size={11} className="text-[#00FFFF]/30 group-hover:text-[#00FFFF]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Základný prístup do Siete a Blogu.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#00FFFF] font-black uppercase tracking-widest text-[9px]">
+                        FREE
+                      </span>
+                      <User
+                        size={11}
+                        className="text-[#00FFFF]/30 group-hover:text-[#00FFFF]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Základný prístup do Siete a Blogu.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#39FF14]/20 bg-black/40 hover:bg-[#39FF14]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#39FF14] font-black uppercase tracking-widest text-[9px]">PRO</span><Lock size={11} className="text-[#39FF14]/30 group-hover:text-[#39FF14]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Pokročilé dáta a expertné uzly.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#39FF14] font-black uppercase tracking-widest text-[9px]">
+                        PRO
+                      </span>
+                      <Lock
+                        size={11}
+                        className="text-[#39FF14]/30 group-hover:text-[#39FF14]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Pokročilé dáta a expertné uzly.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#FFD700]/20 bg-black/40 hover:bg-[#FFD700]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#FFD700] font-black uppercase tracking-widest text-[9px]">OMEGA</span><Lock size={11} className="text-[#FFD700]/30 group-hover:text-[#FFD700]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Prístup k Omega VIP Archívom a Klastrom.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#FFD700] font-black uppercase tracking-widest text-[9px]">
+                        OMEGA
+                      </span>
+                      <Lock
+                        size={11}
+                        className="text-[#FFD700]/30 group-hover:text-[#FFD700]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Prístup k Omega VIP Archívom a Klastrom.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#D2B48C]/20 bg-black/40 hover:bg-[#D2B48C]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#D2B48C] font-black uppercase tracking-widest text-[9px]">MODERATOR</span><Shield size={11} className="text-[#D2B48C]/30 group-hover:text-[#D2B48C]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Správa siete a komunitný štít.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#D2B48C] font-black uppercase tracking-widest text-[9px]">
+                        MODERATOR
+                      </span>
+                      <Shield
+                        size={11}
+                        className="text-[#D2B48C]/30 group-hover:text-[#D2B48C]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Správa siete a komunitný štít.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#FF6600]/20 bg-black/40 hover:bg-[#FF6600]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#FF6600] font-black uppercase tracking-widest text-[9px]">ADMIN</span><Shield size={11} className="text-[#FF6600]/30 group-hover:text-[#FF6600]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Správa databázy a exekutíva.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#FF6600] font-black uppercase tracking-widest text-[9px]">
+                        ADMIN
+                      </span>
+                      <Shield
+                        size={11}
+                        className="text-[#FF6600]/30 group-hover:text-[#FF6600]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Správa databázy a exekutíva.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#FF1493]/20 bg-black/40 hover:bg-[#FF1493]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#FF1493] font-black uppercase tracking-widest text-[9px]">MASTER</span><Lock size={11} className="text-[#FF1493]/30 group-hover:text-[#FF1493]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Čestný člen a Master Protokoly.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#FF1493] font-black uppercase tracking-widest text-[9px]">
+                        MASTER
+                      </span>
+                      <Lock
+                        size={11}
+                        className="text-[#FF1493]/30 group-hover:text-[#FF1493]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Čestný člen a Master Protokoly.
+                    </p>
                   </div>
 
                   <div className="flex flex-col p-2 rounded-lg border border-[#FF003C]/20 bg-black/40 hover:bg-[#FF003C]/5 transition-all backdrop-blur-sm group">
-                    <div className="flex justify-between items-center mb-0.5"><span className="text-[#FF003C] font-black uppercase tracking-widest text-[9px]">ARCHITECT</span><Unlock size={11} className="text-[#FF003C]/30 group-hover:text-[#FF003C]" /></div>
-                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">Plný Root Access a prepis kódov.</p>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[#FF003C] font-black uppercase tracking-widest text-[9px]">
+                        ARCHITECT
+                      </span>
+                      <Unlock
+                        size={11}
+                        className="text-[#FF003C]/30 group-hover:text-[#FF003C]"
+                      />
+                    </div>
+                    <p className="text-gray-500 text-[7.5px] uppercase tracking-wider leading-tight">
+                      Plný Root Access a prepis kódov.
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* 4. KVADRANT: UPLINK HLAVIČKA & RÝCHLE PORTY (ID pre Hamburger Výťah) */}
-              <div id="nexus-uplink-ports" className="w-full flex flex-col gap-2.5 border-t border-white/10 pt-2.5">
-                
+              <div
+                id="nexus-uplink-ports"
+                className="w-full flex flex-col gap-2.5 border-t border-white/10 pt-2.5"
+              >
                 {/* HLAVIČKA UPLINKU */}
                 <div className="w-full flex items-center gap-2.5 bg-black/40 p-2.5 rounded-lg border border-purple-500/20">
-                  <Fingerprint size={28} className="text-purple-500 animate-pulse shadow-[0_0_15px_rgba(168,85,247,0.4)] rounded-full shrink-0" />
+                  <Fingerprint
+                    size={28}
+                    className="text-purple-500 animate-pulse shadow-[0_0_15px_rgba(168,85,247,0.4)] rounded-full shrink-0"
+                  />
                   <div>
                     <h1 className="text-lg md:text-xl font-black text-white uppercase tracking-[0.2em] italic leading-none">
-                      Nexus <span className="text-purple-500 not-italic">Uplink</span>
+                      Nexus{" "}
+                      <span className="text-purple-500 not-italic">Uplink</span>
                     </h1>
                     <p className="text-gray-500 text-[8px] uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
                       <Terminal size={9} /> Verifikácia Entity
@@ -749,64 +936,122 @@ export const UplinkModal = ({ startMode = "login" }) => {
 
                 {/* SSO Buttons */}
                 <div className="flex flex-col gap-1.5">
-                  <button onClick={() => handleOAuth("google")} className="flex items-center justify-between w-full p-2.5 bg-black/40 border border-white/10 hover:border-white/30 hover:bg-white/5 rounded-lg transition-all group">
+                  <button
+                    onClick={() => handleOAuth("google")}
+                    className="flex items-center justify-between w-full p-2.5 bg-black/40 border border-white/10 hover:border-white/30 hover:bg-white/5 rounded-lg transition-all group"
+                  >
                     <div className="flex items-center gap-2.5">
-                      <Chrome size={16} className="text-[#EA4335] group-hover:scale-110 transition-transform" />
-                      <span className="text-white font-bold uppercase tracking-widest text-xs group-hover:text-[#EA4335] transition-colors">Google Port</span>
+                      <Chrome
+                        size={16}
+                        className="text-[#EA4335] group-hover:scale-110 transition-transform"
+                      />
+                      <span className="text-white font-bold uppercase tracking-widest text-xs group-hover:text-[#EA4335] transition-colors">
+                        Google Port
+                      </span>
                     </div>
-                    <ArrowRight size={13} className="text-white/20 group-hover:text-[#EA4335] group-hover:translate-x-1 transition-all" />
+                    <ArrowRight
+                      size={13}
+                      className="text-white/20 group-hover:text-[#EA4335] group-hover:translate-x-1 transition-all"
+                    />
                   </button>
 
-                  <button onClick={() => handleOAuth("linkedin_oidc")} className="flex items-center justify-between w-full p-2.5 bg-black/40 border border-white/10 hover:border-[#0A66C2]/50 hover:bg-[#0A66C2]/5 rounded-lg transition-all group">
+                  <button
+                    onClick={() => handleOAuth("linkedin_oidc")}
+                    className="flex items-center justify-between w-full p-2.5 bg-black/40 border border-white/10 hover:border-[#0A66C2]/50 hover:bg-[#0A66C2]/5 rounded-lg transition-all group"
+                  >
                     <div className="flex items-center gap-2.5">
-                      <Linkedin size={16} className="text-[#0A66C2] group-hover:scale-110 transition-transform" />
-                      <span className="text-white font-bold uppercase tracking-widest text-xs group-hover:text-[#0A66C2] transition-colors">LinkedIn Port</span>
+                      <Linkedin
+                        size={16}
+                        className="text-[#0A66C2] group-hover:scale-110 transition-transform"
+                      />
+                      <span className="text-white font-bold uppercase tracking-widest text-xs group-hover:text-[#0A66C2] transition-colors">
+                        LinkedIn Port
+                      </span>
                     </div>
-                    <ArrowRight size={13} className="text-white/20 group-hover:text-[#0A66C2] group-hover:translate-x-1 transition-all" />
+                    <ArrowRight
+                      size={13}
+                      className="text-white/20 group-hover:text-[#0A66C2] group-hover:translate-x-1 transition-all"
+                    />
                   </button>
                 </div>
 
                 {/* Dev & Gaming Grid */}
                 <div className="grid grid-cols-4 gap-1.5 mt-0.5">
                   <div className="relative group/tooltip hover:z-">
-                    <button onClick={() => handleOAuth("github")} type="button" className="w-full p-2 bg-[#24292e]/80 hover:bg-white text-white hover:text-black font-black border border-white/10 rounded-lg flex items-center justify-center transition-all">
-                      <Github size={14} className="hover:scale-110 transition-transform" />
+                    <button
+                      onClick={() => handleOAuth("github")}
+                      type="button"
+                      className="w-full p-2 bg-[#24292e]/80 hover:bg-white text-white hover:text-black font-black border border-white/10 rounded-lg flex items-center justify-center transition-all"
+                    >
+                      <Github
+                        size={14}
+                        className="hover:scale-110 transition-transform"
+                      />
                     </button>
-                    <TooltipHover text="Dev Login (GitHub)" dimColor="#ffffff" position="top" />
+                    <TooltipHover
+                      text="Dev Login (GitHub)"
+                      dimColor="#ffffff"
+                      position="top"
+                    />
                   </div>
 
                   <div className="relative group/tooltip hover:z-">
-                    <button onClick={() => handleOAuth("discord")} type="button" className="w-full p-2 bg-[#5865F2]/10 hover:bg-[#5865F2]/20 text-[#5865F2] border border-[#5865F2]/30 rounded-lg flex items-center justify-center transition-all">
-                      <Gamepad2 size={14} className="hover:scale-110 transition-transform" />
+                    <button
+                      onClick={() => handleOAuth("discord")}
+                      type="button"
+                      className="w-full p-2 bg-[#5865F2]/10 hover:bg-[#5865F2]/20 text-[#5865F2] border border-[#5865F2]/30 rounded-lg flex items-center justify-center transition-all"
+                    >
+                      <Gamepad2
+                        size={14}
+                        className="hover:scale-110 transition-transform"
+                      />
                     </button>
-                    <TooltipHover text="Discord Login" dimColor="#5865F2" position="top" />
+                    <TooltipHover
+                      text="Discord Login"
+                      dimColor="#5865F2"
+                      position="top"
+                    />
                   </div>
 
                   <div className="relative group/tooltip hover:z-">
-                    <button onClick={() => handleOAuth("twitch")} type="button" className="w-full p-2 bg-[#9146FF]/10 hover:bg-[#9146FF]/20 text-[#9146FF] border border-[#9146FF]/30 rounded-lg flex items-center justify-center transition-all">
-                      <Twitch size={14} className="hover:scale-110 transition-transform" />
+                    <button
+                      onClick={() => handleOAuth("twitch")}
+                      type="button"
+                      className="w-full p-2 bg-[#9146FF]/10 hover:bg-[#9146FF]/20 text-[#9146FF] border border-[#9146FF]/30 rounded-lg flex items-center justify-center transition-all"
+                    >
+                      <Twitch
+                        size={14}
+                        className="hover:scale-110 transition-transform"
+                      />
                     </button>
-                    <TooltipHover text="Twitch Login" dimColor="#9146FF" position="top" />
+                    <TooltipHover
+                      text="Twitch Login"
+                      dimColor="#9146FF"
+                      position="top"
+                    />
                   </div>
 
                   <div className="relative group/tooltip hover:z-">
-                    <button onClick={() => handleFeatureInDev("YouTube API")} disabled={isLoading} className="w-full p-2 bg-[#FF0000]/10 hover:bg-[#FF0000]/20 text-[#FF0000] border border-[#FF0000]/30 rounded-lg flex items-center justify-center transition-all cursor-not-allowed opacity-50">
-                      <Youtube size={14} className="hover:scale-110 transition-transform" />
+                    <button
+                      onClick={() => handleFeatureInDev("YouTube API")}
+                      disabled={isLoading}
+                      className="w-full p-2 bg-[#FF0000]/10 hover:bg-[#FF0000]/20 text-[#FF0000] border border-[#FF0000]/30 rounded-lg flex items-center justify-center transition-all cursor-not-allowed opacity-50"
+                    >
+                      <Youtube
+                        size={14}
+                        className="hover:scale-110 transition-transform"
+                      />
                     </button>
-                    <TooltipHover text="YouTube (Čaká na API)" dimColor="#FF0000" position="top" />
+                    <TooltipHover
+                      text="YouTube (Čaká na API)"
+                      dimColor="#FF0000"
+                      position="top"
+                    />
                   </div>
                 </div>
               </div>
-
             </div>
-
           </div>
-        </div>
-        {/* ⚡⚡⚡ KONIEC OPRAVY ⚡⚡⚡ */}
-
-        {/* FOOTER NA SPODKU SCROLLU */}
-        <div className="w-full bg-[#050a0e] border-t border-white/10 mt-auto pt-4 pb-4 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] shrink-0">
-          <GlobalFooter themeColor="#a855f7" />
         </div>
       </div>
 
@@ -818,7 +1063,13 @@ export const UplinkModal = ({ startMode = "login" }) => {
               <Camera className="animate-pulse" size={18} /> QR BIO-SCAN
             </h3>
             <div className="relative w-full aspect-square border-2 border-[#00FFFF]/30 rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(0,255,255,0.15)] bg-black group">
-              <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover scale-[1.02]" playsInline autoPlay muted />
+              <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover scale-[1.02]"
+                playsInline
+                autoPlay
+                muted
+              />
               <canvas ref={canvasRef} className="hidden" />
               <div className="absolute inset-0 z-10 pointer-events-none p-4">
                 <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-[#00FFFF] animate-[corner-tl_2s_ease-in-out_infinite]"></div>
@@ -828,22 +1079,47 @@ export const UplinkModal = ({ startMode = "login" }) => {
                 <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#00FFFF]/80 shadow-[0_0_15px_#00FFFF] animate-[scan_2s_ease-in-out_infinite]"></div>
               </div>
             </div>
-            <button onClick={stopQRScanner} className="mt-3 w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2">
+            <button
+              onClick={stopQRScanner}
+              className="mt-3 w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+            >
               <X size={14} /> Prerušiť Skenovanie
             </button>
           </div>
         </div>
       )}
 
+      {/* FOOTER NA SPODKU SCROLLU */}
+      <footer className="w-full relative z-20 mt-16 border-t border-[#a855f7]/20">
+        <GlobalFooter
+          themeColor="#a855f7"
+          activeTab="uplink"
+          userTier={userTier}
+          onNavigate={(route) => {
+            const target = route.startsWith("/") ? route : `/${route}`;
+            if (typeof navigate === "function") navigate(target);
+            else window.location.href = target;
+          }}
+        />
+      </footer>
+
       {/* LOKÁLNE ŠTÍTY A NAVIGÁCIA */}
       <GlobalHamburgerMenu
         activeTab="uplink"
         themeColor="#a855f7"
         targetScrollId="nexus-uplink-scroll"
+        userState={userState}
+        userTier={userTier}
+        onNavigate={(route) => {
+          if (typeof navigate === "function") navigate(route);
+          else window.location.href = route;
+        }}
       />
+
       <GlobalComponents
         themeColor="#a855f7"
         targetScrollId="nexus-uplink-scroll"
+        userState={userState}
       />
     </div>
   );

@@ -1,9 +1,6 @@
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { Activity, ArrowLeft, Clock, Film, ShieldAlert, Terminal } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CORE_VERSION = "SYS04-VIDEO_GALLERY V20.0-STANDBY";
@@ -11,8 +8,23 @@ const DIM_COLOR = "#FF0000";
 const STANDBY_IMAGE =
   "https://ljyvsolsgliephsfkfgx.supabase.co/storage/v1/object/public/shop/images/sys01-05_modulMaster/16x9_desktop/SYS04_NEXUS-VIDEO-GALLERY-16x9.jpg";
 
-export const Sys04_VideoGallery = () => {
+export const Sys04_VideoGallery = ({
+  onThemeChange,
+  setThemeColor,
+  setActiveTab,
+}) => {
   const navigate = useNavigate();
+
+  // 🎯 Kánonická aktivácia červeného motívu (#FF0000) a tabu sys04
+  useEffect(() => {
+    if (typeof setActiveTab === "function") {
+      setActiveTab("sys04");
+    }
+    const triggerTheme = onThemeChange || setThemeColor;
+    if (typeof triggerTheme === "function") {
+      triggerTheme(DIM_COLOR);
+    }
+  }, [onThemeChange, setThemeColor, setActiveTab]);
 
   const handleBackHome = () => {
     if (SoundFX && typeof SoundFX.click === "function") SoundFX.click();
@@ -123,9 +135,9 @@ export const Sys04_VideoGallery = () => {
         </div>
       </div>
 
-      <GlobalComponents themeColor={DIM_COLOR} />
+      {/* <GlobalComponents themeColor={DIM_COLOR} />
       <GlobalHamburgerMenu activeTab="sys04" themeColor={DIM_COLOR} />
-      <GlobalFooter themeColor={DIM_COLOR} />
+      <GlobalFooter themeColor={DIM_COLOR} /> */}
     </div>
   );
 };

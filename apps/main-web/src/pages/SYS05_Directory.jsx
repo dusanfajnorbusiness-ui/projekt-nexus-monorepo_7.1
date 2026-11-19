@@ -2,8 +2,6 @@ import { Sys01_05_Filters } from "@main-web/components/Sys01-05_Filters.jsx";
 // ⚠️ PRIAMY DOVOZ TVOJHO VLASTNÉHO DATASETU Z src/data/sys05_directory.js
 import * as Sys05DataModule from "@main-web/data/sys05_directory.js";
 import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { Briefcase, Check, Copy, ExternalLink, Globe, HardDrive, Lock, Mail, Share2, ShoppingCart, Terminal } from "lucide-react";
 import * as LucideIcons from "lucide-react";
@@ -52,9 +50,24 @@ export const SYS05_CATEGORIES = Sys05DataModule.SYS05_CATEGORIES || [
   { id: "SYS_NODES", label: "6. Systémové Uzly", icon: "Terminal" },
 ];
 
-export const SYS05_Directory = () => {
+export const SYS05_Directory = ({
+  onThemeChange,
+  setThemeColor,
+  setActiveTab,
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // 🎯 Kánonická aktivácia zelenej farby (#39FF14) a tabu sys05
+  useEffect(() => {
+    if (typeof setActiveTab === "function") {
+      setActiveTab("sys05");
+    }
+    const triggerTheme = onThemeChange || setThemeColor;
+    if (typeof triggerTheme === "function") {
+      triggerTheme(SYS05_COLOR);
+    }
+  }, [onThemeChange, setThemeColor, setActiveTab]);
 
   // --- STAV MANAŽMENT ---
   const [activeCategory, setActiveCategory] = useState("ALL");
@@ -343,7 +356,7 @@ export const SYS05_Directory = () => {
 
   return (
     <div className="min-h-screen bg-[#020406] text-white font-sans selection:bg-[#39FF14] selection:text-black">
-      {/* <GlobalComponents themeColor={SYS05_COLOR} /> */}
+      
 
       {/* TOAST NOTIFIKÁCIA */}
       {toastMessage && (
@@ -483,8 +496,9 @@ export const SYS05_Directory = () => {
         </div>
       </main>
 
-      <GlobalHamburgerMenu activeTab="sys05" themeColor={SYS05_COLOR} />
+      {/* <GlobalHamburgerMenu activeTab="sys05" themeColor={SYS05_COLOR} />
       <GlobalFooter themeColor={SYS05_COLOR} />
+      <GlobalComponents themeColor={SYS05_COLOR} /> */}
     </div>
   );
 };

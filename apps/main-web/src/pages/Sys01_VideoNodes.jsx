@@ -1,9 +1,7 @@
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
+
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { Activity, ArrowLeft, Clock, PlaySquare, ShieldAlert, Terminal } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CORE_VERSION = "SYS01-VIDEO_NODES V20.0-STANDBY";
@@ -11,8 +9,23 @@ const DIM_COLOR = "#FF0000";
 const STANDBY_IMAGE =
   "https://ljyvsolsgliephsfkfgx.supabase.co/storage/v1/object/public/shop/images/sys01-05_modulMaster/16x9_desktop/SYS01_VIDEO-NODES-16x9.jpg";
 
-export const Sys01_VideoNodes = () => {
+export const Sys01_VideoNodes = ({
+  onThemeChange,
+  setThemeColor,
+  setActiveTab,
+}) => {
   const navigate = useNavigate();
+
+  // 🎯 Kánonické odpálenie červenej farby (#FF0000) a aktívneho tabu do App.jsx
+  useEffect(() => {
+    if (typeof setActiveTab === "function") {
+      setActiveTab("sys01");
+    }
+    const triggerTheme = onThemeChange || setThemeColor;
+    if (typeof triggerTheme === "function") {
+      triggerTheme(DIM_COLOR);
+    }
+  }, [onThemeChange, setThemeColor, setActiveTab]);
 
   const handleBackHome = () => {
     if (SoundFX && typeof SoundFX.click === "function") SoundFX.click();
@@ -128,9 +141,9 @@ export const Sys01_VideoNodes = () => {
         </div>
       </div>
 
-      <GlobalComponents themeColor={DIM_COLOR} />
+      {/* <GlobalComponents themeColor={DIM_COLOR} />
       <GlobalHamburgerMenu activeTab="sys01" themeColor={DIM_COLOR} />
-      <GlobalFooter themeColor={DIM_COLOR} />
+      <GlobalFooter themeColor={DIM_COLOR} /> */}
     </div>
   );
 };

@@ -1,9 +1,6 @@
-import { Sys01_05_Filters } from "@main-web/components/Sys01-05_Filters.jsx";
+import { Sys01_05_Filters } from "@main-web/components/Sys01-05_Filters.jsx"; 
 import { getNormalizedTier } from "@main-web/data/Sys01-05_Filters.js";
 import { GALLERY_CATEGORIES, SYS03_GALLERY_DATA } from "@main-web/data/Sys03_ImgGallery.js";
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { GlobalPaywallModal } from "@shop/components/GlobalPaywallModal.jsx";
 import { Activity, Copy, Download, Eye, Image as ImageIcon, Lock, Terminal, X } from "lucide-react";
@@ -31,13 +28,28 @@ export const TIER_COLOR_MAP = {
 
 export const getTierBadgeColor = (tier) => {
   if (!tier) return "#00F3FF";
-  const cleanTier = String(tier).toUpperCase().trim();
+  const cleanTier = String(tier || "").toUpperCase().trim();
   return TIER_COLOR_MAP[cleanTier] || "#00F3FF";
 };
 
-export const Sys03_ImgGallery = () => {
+export const Sys03_ImgGallery = ({
+  onThemeChange,
+  setThemeColor,
+  setActiveTab,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 🎯 Kánonická aktivácia fialového motívu (#BF00FF) a tabu sys03
+  useEffect(() => {
+    if (typeof setActiveTab === "function") {
+      setActiveTab("sys03");
+    }
+    const triggerTheme = onThemeChange || setThemeColor;
+    if (typeof triggerTheme === "function") {
+      triggerTheme(DIM_COLOR);
+    }
+  }, [onThemeChange, setThemeColor, setActiveTab]);
 
   const queryParams = useMemo(
     () => new URLSearchParams(location.search),
@@ -91,6 +103,19 @@ export const Sys03_ImgGallery = () => {
   // Paywall Integrácia
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [paywallCampaign, setPaywallCampaign] = useState(null);
+
+  // Predvolene sú všetky kategórie zatvorené (alebo len prvá otvorená), obrázky sa v DOMe nestiahnu
+  const [openSections, setOpenSections] = useState({
+    DIMENSIONS: true, // Otvorená iba prvá kategória pre okamžitý vizuál
+  });
+
+  const toggleSection = (catId) => {
+    if (SoundFX && typeof SoundFX.click === "function") SoundFX.click();
+    setOpenSections((prev) => ({
+      ...prev,
+      [catId]: !prev[catId],
+    }));
+  };
 
   // Zistenie TIERu operátora
   const userTier = useMemo(() => {
@@ -314,180 +339,383 @@ export const Sys03_ImgGallery = () => {
         {/* 🎯 SÉMANTICKÝ PICASSO ANCHOR PRE DVERE GALÉRIE */}
         <div id="sys03-picasso-door" className="scroll-mt-28" />
 
-        {/* 🖼️ HLAVNÁ MRIEŽKA OBRÁZKOV */}
-        <div
-          id="sys03-gallery-grid"
-          className={`scroll-mt-12 sm:scroll-mt-8 grid ${
-            viewMode === "GRID_LG"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              : viewMode === "GRID_MD"
-                ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
-                : "grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-4"
-          }`}
-        >
-          {filteredItems.map((item) => {
-            // 🎯 PREPOJENIE EFEKTÍVNEHO FORMÁTU S GLOBÁLNYM FILTROM
-            const effectiveRatio =
-              activeRatios[item.id] ||
-              (activeFormat && activeFormat !== "ALL" && activeFormat !== "zip"
-                ? activeFormat
-                : "1x1");
+        {/* 🖼️ HLAVNÁ MRIEŽKA OBRÁZKOV (V20 ACCORDION CLUSTER & HTTP/2 SHIELD) */}
+        {activeCategory === "ALL" && !searchQuery ? (
+          /* ========================================================================= */
+          /* 📂 REŽIM 1: AKORDEÓNY PRE "VŠETKY AKTÍVA" (ŠETRENIE SUPABASE CDN STREAMOV) */
+          /* ========================================================================= */
+          <div className="w-full space-y-4">
+            {GALLERY_CATEGORIES.filter((c) => c.id !== "ALL").map((cat) => {
+              // Párovanie položiek ku kategórii
+              const catItems = filteredItems.filter(
+                (item) => item.categoryId === cat.id || item.category === cat.id
+              );
+              if (catItems.length === 0) return null;
 
-            const currentRatio = effectiveRatio;
-            const currentUrl =
-              item.formats[effectiveRatio] || item.formats["1x1"];
+              const isOpen = !!openSections[cat.id];
 
-            const isBotLocked =
-              item.isBot && item.tier !== "FREE" && userTier === "FREE";
-            const isDownloading = downloadingId === item.id;
-            const isCompact = viewMode === "GRID_SM";
-            const tierColor = getTierBadgeColor(item.tier);
-
-            return (
-              <div
-                key={item.id}
-                className="bg-[#050A0E]/90 border border-white/10 hover:border-white/30 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group flex flex-col justify-between"
-              >
-                {/* OBRÁZOK S NÁHĽADOM */}
-                <div className="relative aspect-square w-full bg-black/80 overflow-hidden border-b border-white/10 flex items-center justify-center">
-                  <img
-                    src={currentUrl}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
-                    onClick={() => {
-                      triggerClick();
-                      setLightboxItem(item);
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "https://ljyvsolsgliephsfkfgx.supabase.co/storage/v1/object/public/shop/images/system-standby_image/1x1_feed/system-standby-1x1.jpg";
-                    }}
-                  />
-
-                  {/* ŠTÍTOK PREVZATÝ Z EFEKTÍVNEHO FORMÁTU */}
-                  <div
-                    className="absolute top-2 left-2 flex items-center gap-1 bg-black/80 px-1.5 py-0.5 rounded border border-white/10 text-[8px] sm:text-[9px] font-black uppercase text-zinc-300 pointer-events-none"
-                    style={{ zIndex: 10 }}
+              return (
+                <div
+                  key={cat.id}
+                  className="border border-[#BF00FF]/30 bg-black/70 rounded-2xl overflow-hidden transition-all shadow-[0_0_20px_rgba(191,0,255,0.06)]"
+                >
+                  {/* TLAČIDLO AKORDEÓNU / SPOILER HLAVIČKA */}
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(cat.id)}
+                    className="w-full flex items-center justify-between p-4 sm:p-5 bg-zinc-950/90 hover:bg-[#BF00FF]/15 border-b border-[#BF00FF]/20 text-left transition-colors cursor-pointer select-none"
                   >
-                    <span>{effectiveRatio.toUpperCase()}</span>
-                  </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#BF00FF] font-mono text-sm sm:text-base font-bold">
+                        {isOpen ? "▼" : "▶"}
+                      </span>
+                      <span className="font-mono text-white text-xs sm:text-sm md:text-base font-black tracking-wider uppercase">
+                        {cat.label}
+                      </span>
+                      <span className="px-2 py-0.5 text-[10px] sm:text-xs font-mono font-bold rounded bg-[#BF00FF]/20 text-[#BF00FF] border border-[#BF00FF]/40">
+                        {catItems.length}
+                      </span>
+                    </div>
+                    <span className="text-[10px] sm:text-xs font-mono text-zinc-400">
+                      {isOpen ? "[ SKRYŤ SEKCIU ▲ ]" : "[ ROZBALIŤ SEKCIU ▼ ]"}
+                    </span>
+                  </button>
 
-                  {/* TIER BADGE */}
-                  <div
-                    className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider border shadow-md pointer-events-none"
-                    style={{
-                      zIndex: 10,
-                      borderColor: tierColor,
-                      backgroundColor: `${tierColor}20`,
-                      color: tierColor,
-                    }}
-                  >
-                    {item.tier || "FREE"}
-                  </div>
-
-                  {/* PREPÍNAČ HOVER POMERU STRÁN */}
-                  {!isCompact && (
+                  {/* KARTY SA VYRENDERUJÚ IBA VTEDY, KEĎ JE SEKCIU ROZBALENÁ */}
+                  {isOpen && (
                     <div
-                      className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/80 p-1 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity"
-                      style={{ zIndex: 20 }}
+                      className={`p-3 sm:p-6 grid ${
+                        viewMode === "GRID_LG"
+                          ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                          : viewMode === "GRID_MD"
+                            ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
+                            : "grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-4"
+                      }`}
                     >
-                      {["1x1", "9x16", "16x9"].map((r) => (
-                        <button
-                          key={r}
-                          onClick={() =>
-                            setActiveRatios((prev) => ({
-                              ...prev,
-                              [item.id]: r,
-                            }))
-                          }
-                          className={`px-1.5 py-0.5 text-[8px] font-black rounded uppercase transition-colors ${
-                            effectiveRatio === r
-                              ? "bg-[#BF00FF] text-white"
-                              : "text-zinc-400 hover:text-white"
-                          }`}
-                        >
-                          {r}
-                        </button>
-                      ))}
+                      {catItems.map((item) => {
+                        const effectiveRatio =
+                          activeRatios[item.id] ||
+                          (activeFormat &&
+                          activeFormat !== "ALL" &&
+                          activeFormat !== "zip"
+                            ? activeFormat
+                            : "1x1");
+                        const currentUrl =
+                          item.formats[effectiveRatio] || item.formats["1x1"];
+                        const isBotLocked =
+                          item.isBot && item.tier !== "FREE" && userTier === "FREE";
+                        const isDownloading = downloadingId === item.id;
+                        const isCompact = viewMode === "GRID_SM";
+                        const tierColor = getTierBadgeColor(item.tier);
+
+                        return (
+                          <div
+                            key={item.id}
+                            className="bg-[#050A0E]/90 border border-white/10 hover:border-[#BF00FF]/50 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group flex flex-col justify-between"
+                          >
+                            <div className="relative aspect-square w-full bg-black/80 overflow-hidden border-b border-white/10 flex items-center justify-center">
+                              <img
+                                src={currentUrl}
+                                alt={item.title}
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                                onClick={() => {
+                                  triggerClick();
+                                  setLightboxItem(item);
+                                }}
+                                onError={(e) => {
+                                  e.currentTarget.src =
+                                    "https://ljyvsolsgliephsfkfgx.supabase.co/storage/v1/object/public/shop/images/system-standby_image/1x1_feed/system-standby-1x1.jpg";
+                                }}
+                              />
+                              <div
+                                className="absolute top-2 left-2 flex items-center gap-1 bg-black/80 px-1.5 py-0.5 rounded border border-white/10 text-[8px] sm:text-[9px] font-black uppercase text-zinc-300 pointer-events-none"
+                                style={{ zIndex: 10 }}
+                              >
+                                <span>{effectiveRatio.toUpperCase()}</span>
+                              </div>
+                              <div
+                                className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider border shadow-md pointer-events-none"
+                                style={{
+                                  zIndex: 10,
+                                  borderColor: tierColor,
+                                  backgroundColor: `${tierColor}20`,
+                                  color: tierColor,
+                                }}
+                              >
+                                {item.tier || "FREE"}
+                              </div>
+                              {!isCompact && (
+                                <div
+                                  className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/80 p-1 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  style={{ zIndex: 20 }}
+                                >
+                                  {["1x1", "9x16", "16x9"].map((r) => (
+                                    <button
+                                      key={r}
+                                      onClick={() =>
+                                        setActiveRatios((prev) => ({
+                                          ...prev,
+                                          [item.id]: r,
+                                        }))
+                                      }
+                                      className={`px-1.5 py-0.5 text-[8px] font-black rounded uppercase transition-colors ${
+                                        effectiveRatio === r
+                                          ? "bg-[#BF00FF] text-white"
+                                          : "text-zinc-400 hover:text-white"
+                                      }`}
+                                    >
+                                      {r}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="p-2.5 sm:p-4 text-left flex flex-col flex-1 justify-between gap-2 sm:gap-3">
+                              <div>
+                                <span className="text-[8px] sm:text-[9px] font-mono font-bold text-zinc-500">
+                                  {item.id}
+                                </span>
+                                <h3 className="text-[11px] sm:text-xs font-black uppercase text-white truncate tracking-wider mt-0.5">
+                                  {item.title}
+                                </h3>
+                              </div>
+                              <div className="grid grid-cols-3 gap-1 pt-2 border-t border-white/5">
+                                <button
+                                  onClick={() => handleCopyUrl(item, effectiveRatio)}
+                                  className={`py-1 px-1 sm:py-1.5 sm:px-2 border rounded-lg text-[8px] sm:text-[9px] font-black uppercase flex items-center justify-center gap-1 transition-all ${
+                                    isBotLocked
+                                      ? "bg-red-950/40 border-red-500/40 text-red-400 hover:bg-red-900/60"
+                                      : "bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white"
+                                  }`}
+                                  title={
+                                    isBotLocked
+                                      ? "Vyžaduje odomknutie licencie"
+                                      : "Skopírovať priamy CDN link"
+                                  }
+                                >
+                                  {isBotLocked ? (
+                                    <Lock size={10} className="text-red-400 shrink-0" />
+                                  ) : (
+                                    <Copy size={10} className="text-[#BF00FF] shrink-0" />
+                                  )}
+                                  <span className="hidden sm:inline">
+                                    {isBotLocked ? "Lock" : "Link"}
+                                  </span>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    triggerClick();
+                                    setLightboxItem(item);
+                                  }}
+                                  className="py-1 px-1 sm:py-1.5 sm:px-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[8px] sm:text-[9px] font-black uppercase text-zinc-300 hover:text-white flex items-center justify-center gap-1 transition-all"
+                                >
+                                  <Eye size={10} className="text-cyan-400 shrink-0" />
+                                  <span className="hidden sm:inline">Pozrieť</span>
+                                </button>
+                                <button
+                                  onClick={() => handleDownload(item, effectiveRatio)}
+                                  disabled={isDownloading}
+                                  className={`py-1 px-1 sm:py-1.5 sm:px-2 rounded-lg text-[8px] sm:text-[9px] font-black uppercase flex items-center justify-center gap-1 transition-all border ${
+                                    isBotLocked
+                                      ? "bg-red-950/40 border-red-500/40 text-red-400"
+                                      : "bg-[#BF00FF]/10 hover:bg-[#BF00FF]/30 border-[#BF00FF]/40 text-white"
+                                  }`}
+                                >
+                                  {isDownloading ? (
+                                    <Activity
+                                      size={10}
+                                      className="animate-spin text-[#BF00FF]"
+                                    />
+                                  ) : isBotLocked ? (
+                                    <Lock size={10} />
+                                  ) : (
+                                    <Download size={10} />
+                                  )}
+                                  <span className="hidden sm:inline">
+                                    {isBotLocked ? "Lock" : "Uložiť"}
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* ========================================================================= */
+          /* 📂 REŽIM 2: KLASICKÁ PRIAMA MRIEŽKA PRI KONKRÉTNEJ KATEGÓRII ALEBO HĽADANÍ */
+          /* ========================================================================= */
+          <div
+            id="sys03-gallery-grid"
+            className={`scroll-mt-12 sm:scroll-mt-8 grid ${
+              viewMode === "GRID_LG"
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                : viewMode === "GRID_MD"
+                  ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
+                  : "grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-4"
+            }`}
+          >
+            {filteredItems.map((item) => {
+              const effectiveRatio =
+                activeRatios[item.id] ||
+                (activeFormat &&
+                activeFormat !== "ALL" &&
+                activeFormat !== "zip"
+                  ? activeFormat
+                  : "1x1");
+              const currentUrl =
+                item.formats[effectiveRatio] || item.formats["1x1"];
+              const isBotLocked =
+                item.isBot && item.tier !== "FREE" && userTier === "FREE";
+              const isDownloading = downloadingId === item.id;
+              const isCompact = viewMode === "GRID_SM";
+              const tierColor = getTierBadgeColor(item.tier);
 
-                {/* OBSAH KARTY */}
-                <div className="p-2.5 sm:p-4 text-left flex flex-col flex-1 justify-between gap-2 sm:gap-3">
-                  <div>
-                    <span className="text-[8px] sm:text-[9px] font-mono font-bold text-zinc-500">
-                      {item.id}
-                    </span>
-                    <h3 className="text-[11px] sm:text-xs font-black uppercase text-white truncate tracking-wider mt-0.5">
-                      {item.title}
-                    </h3>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-1 pt-2 border-t border-white/5">
-                    <button
-                      onClick={() => handleCopyUrl(item, effectiveRatio)}
-                      className={`py-1 px-1 sm:py-1.5 sm:px-2 border rounded-lg text-[8px] sm:text-[9px] font-black uppercase flex items-center justify-center gap-1 transition-all ${
-                        isBotLocked
-                          ? "bg-red-950/40 border-red-500/40 text-red-400 hover:bg-red-900/60"
-                          : "bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white"
-                      }`}
-                      title={
-                        isBotLocked
-                          ? "Vyžaduje odomknutie licencie"
-                          : "Skopírovať priamy CDN link"
-                      }
-                    >
-                      {isBotLocked ? (
-                        <Lock size={10} className="text-red-400 shrink-0" />
-                      ) : (
-                        <Copy size={10} className="text-[#BF00FF] shrink-0" />
-                      )}
-                      <span className="hidden sm:inline">
-                        {isBotLocked ? "Lock" : "Link"}
-                      </span>
-                    </button>
-
-                    <button
+              return (
+                <div
+                  key={item.id}
+                  className="bg-[#050A0E]/90 border border-white/10 hover:border-[#BF00FF]/50 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group flex flex-col justify-between"
+                >
+                  <div className="relative aspect-square w-full bg-black/80 overflow-hidden border-b border-white/10 flex items-center justify-center">
+                    <img
+                      src={currentUrl}
+                      alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
                       onClick={() => {
                         triggerClick();
                         setLightboxItem(item);
                       }}
-                      className="py-1 px-1 sm:py-1.5 sm:px-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[8px] sm:text-[9px] font-black uppercase text-zinc-300 hover:text-white flex items-center justify-center gap-1 transition-all"
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "https://ljyvsolsgliephsfkfgx.supabase.co/storage/v1/object/public/shop/images/system-standby_image/1x1_feed/system-standby-1x1.jpg";
+                      }}
+                    />
+                    <div
+                      className="absolute top-2 left-2 flex items-center gap-1 bg-black/80 px-1.5 py-0.5 rounded border border-white/10 text-[8px] sm:text-[9px] font-black uppercase text-zinc-300 pointer-events-none"
+                      style={{ zIndex: 10 }}
                     >
-                      <Eye size={10} className="text-cyan-400 shrink-0" />
-                      <span className="hidden sm:inline">Pozrieť</span>
-                    </button>
+                      <span>{effectiveRatio.toUpperCase()}</span>
+                    </div>
+                    <div
+                      className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider border shadow-md pointer-events-none"
+                      style={{
+                        zIndex: 10,
+                        borderColor: tierColor,
+                        backgroundColor: `${tierColor}20`,
+                        color: tierColor,
+                      }}
+                    >
+                      {item.tier || "FREE"}
+                    </div>
+                    {!isCompact && (
+                      <div
+                        className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/80 p-1 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{ zIndex: 20 }}
+                      >
+                        {["1x1", "9x16", "16x9"].map((r) => (
+                          <button
+                            key={r}
+                            onClick={() =>
+                              setActiveRatios((prev) => ({
+                                ...prev,
+                                [item.id]: r,
+                              }))
+                            }
+                            className={`px-1.5 py-0.5 text-[8px] font-black rounded uppercase transition-colors ${
+                              effectiveRatio === r
+                                ? "bg-[#BF00FF] text-white"
+                                : "text-zinc-400 hover:text-white"
+                            }`}
+                          >
+                            {r}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-                    <button
-                      onClick={() => handleDownload(item, effectiveRatio)}
-                      disabled={isDownloading}
-                      className={`py-1 px-1 sm:py-1.5 sm:px-2 rounded-lg text-[8px] sm:text-[9px] font-black uppercase flex items-center justify-center gap-1 transition-all border ${
-                        isBotLocked
-                          ? "bg-red-950/40 border-red-500/40 text-red-400"
-                          : "bg-[#BF00FF]/10 hover:bg-[#BF00FF]/30 border-[#BF00FF]/40 text-white"
-                      }`}
-                    >
-                      {isDownloading ? (
-                        <Activity
-                          size={10}
-                          className="animate-spin text-[#BF00FF]"
-                        />
-                      ) : isBotLocked ? (
-                        <Lock size={10} />
-                      ) : (
-                        <Download size={10} />
-                      )}
-                      <span className="hidden sm:inline">
-                        {isBotLocked ? "Lock" : "Uložiť"}
+                  <div className="p-2.5 sm:p-4 text-left flex flex-col flex-1 justify-between gap-2 sm:gap-3">
+                    <div>
+                      <span className="text-[8px] sm:text-[9px] font-mono font-bold text-zinc-500">
+                        {item.id}
                       </span>
-                    </button>
+                      <h3 className="text-[11px] sm:text-xs font-black uppercase text-white truncate tracking-wider mt-0.5">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1 pt-2 border-t border-white/5">
+                      <button
+                        onClick={() => handleCopyUrl(item, effectiveRatio)}
+                        className={`py-1 px-1 sm:py-1.5 sm:px-2 border rounded-lg text-[8px] sm:text-[9px] font-black uppercase flex items-center justify-center gap-1 transition-all ${
+                          isBotLocked
+                            ? "bg-red-950/40 border-red-500/40 text-red-400 hover:bg-red-900/60"
+                            : "bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white"
+                        }`}
+                        title={
+                          isBotLocked
+                            ? "Vyžaduje odomknutie licencie"
+                            : "Skopírovať priamy CDN link"
+                        }
+                      >
+                        {isBotLocked ? (
+                          <Lock size={10} className="text-red-400 shrink-0" />
+                        ) : (
+                          <Copy size={10} className="text-[#BF00FF] shrink-0" />
+                        )}
+                        <span className="hidden sm:inline">
+                          {isBotLocked ? "Lock" : "Link"}
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          triggerClick();
+                          setLightboxItem(item);
+                        }}
+                        className="py-1 px-1 sm:py-1.5 sm:px-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[8px] sm:text-[9px] font-black uppercase text-zinc-300 hover:text-white flex items-center justify-center gap-1 transition-all"
+                      >
+                        <Eye size={10} className="text-cyan-400 shrink-0" />
+                        <span className="hidden sm:inline">Pozrieť</span>
+                      </button>
+                      <button
+                        onClick={() => handleDownload(item, effectiveRatio)}
+                        disabled={isDownloading}
+                        className={`py-1 px-1 sm:py-1.5 sm:px-2 rounded-lg text-[8px] sm:text-[9px] font-black uppercase flex items-center justify-center gap-1 transition-all border ${
+                          isBotLocked
+                            ? "bg-red-950/40 border-red-500/40 text-red-400"
+                            : "bg-[#BF00FF]/10 hover:bg-[#BF00FF]/30 border-[#BF00FF]/40 text-white"
+                        }`}
+                      >
+                        {isDownloading ? (
+                          <Activity
+                            size={10}
+                            className="animate-spin text-[#BF00FF]"
+                          />
+                        ) : isBotLocked ? (
+                          <Lock size={10} />
+                        ) : (
+                          <Download size={10} />
+                        )}
+                        <span className="hidden sm:inline">
+                          {isBotLocked ? "Lock" : "Uložiť"}
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* LIGHTBOX MODAL */}
@@ -614,9 +842,9 @@ export const Sys03_ImgGallery = () => {
         userTier={userTier}
       />
 
-      <GlobalComponents themeColor={DIM_COLOR} />
+      {/* <GlobalComponents themeColor={DIM_COLOR} />
       <GlobalHamburgerMenu activeTab="sys03" themeColor={DIM_COLOR} />
-      <GlobalFooter themeColor={DIM_COLOR} />
+      <GlobalFooter themeColor={DIM_COLOR} /> */}
     </div>
   );
 };

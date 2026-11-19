@@ -1007,11 +1007,32 @@ export function App() {
       else if (path.startsWith("login"))
         setActiveTab("login"); // 🛑 Tento port tu chýbal!
       // 🌐 ZACHYTENIE SYSTÉMOVÝCH UZLOV (SYS)
-      else if (path.startsWith("Sys01_VideoNodes")) setActiveTab("sys01");
-      else if (path.startsWith("Sys02_Mentoring")) setActiveTab("sys02");
-      else if (path.startsWith("Sys03_ImgGallery")) setActiveTab("sys03");
-      else if (path.startsWith("Sys04_VideoGallery")) setActiveTab("sys04");
-      else if (path.startsWith("SYS05_Directory")) setActiveTab("sys05");
+      else if (
+        path.startsWith("Sys01_VideoNodes") ||
+        path.startsWith("video_nodes")
+      )
+        setActiveTab("sys01");
+      else if (
+        path.startsWith("Sys02_Mentoring") ||
+        path.startsWith("video_mentoring")
+      )
+        setActiveTab("sys02");
+      else if (
+        path.startsWith("Sys03_ImgGallery") ||
+        path.startsWith("nexus_img_gallery")
+      )
+        setActiveTab("sys03");
+      else if (
+        path.startsWith("Sys04_VideoGallery") ||
+        path.startsWith("nexus_video_gallery")
+      )
+        setActiveTab("sys04");
+      else if (
+        path.startsWith("SYS05_Directory") ||
+        path.startsWith("sys05-directory") ||
+        path.startsWith("links")
+      )
+        setActiveTab("sys05");
       else if (path === "" || path === "home") {
         setActiveTab("home");
       }
@@ -1455,20 +1476,7 @@ export function App() {
     );
   }
 
-  // Pridaný obal <HelmetProvider>, aby SEO tagy vnútri modalu nespadli
-  if (showUplink) {
-    return (
-      <HelmetProvider>
-        <UplinkModal
-          onUnlock={handleUnlock}
-          onViewVop={() => {
-            setActiveTab("vop"); // Prepne Matrix na podmienky
-            setShowUplink(false); // Dočasne schová modal, aby si ich mohol čítať
-          }}
-        />
-      </HelmetProvider>
-    );
-  }
+  
 
   return (
     <HelmetProvider>
@@ -1784,24 +1792,10 @@ export function App() {
                         <UplinkModal
                           userState={userState}
                           setUserState={setUserState}
-                          onSuccess={() => {
-                            if (typeof navigate === "function") {
-                              navigate("/");
-                            } else {
-                              window.location.href = "/";
-                            }
-                          }}
-                        />
-                      </PublicRoute>
-                    }
-                  />
-                  <Route
-                    path="/uplinkmodal/login/*"
-                    element={
-                      <PublicRoute userState={userState}>
-                        <UplinkModal
-                          userState={userState}
-                          setUserState={setUserState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                          setActiveTab={setActiveTab}
                           onSuccess={() => {
                             const hostname =
                               typeof window !== "undefined"
@@ -1820,31 +1814,7 @@ export function App() {
                       </PublicRoute>
                     }
                   />
-                  <Route
-                    path="/uplinkmodal/register/*"
-                    element={
-                      <PublicRoute userState={userState}>
-                        <UplinkModal
-                          userState={userState}
-                          setUserState={setUserState}
-                          onSuccess={() => {
-                            const hostname =
-                              typeof window !== "undefined"
-                                ? String(window.location.hostname || "")
-                                : "";
-                            const isLocalhost =
-                              hostname === "localhost" ||
-                              hostname === "127.0.0.1";
-                            if (isLocalhost) {
-                              navigate("/");
-                            } else {
-                              window.location.href = "https://projekt-nexus.sk";
-                            }
-                          }}
-                        />
-                      </PublicRoute>
-                    }
-                  />
+
                   <Route
                     path="/uplinkmodal/*"
                     element={
@@ -1852,6 +1822,10 @@ export function App() {
                         <UplinkModal
                           userState={userState}
                           setUserState={setUserState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                          setActiveTab={setActiveTab}
                           onSuccess={() => {
                             const hostname =
                               typeof window !== "undefined"
@@ -2178,15 +2152,56 @@ export function App() {
                     path="/Sys01_VideoNodes/*"
                     element={
                       <PublicRoute>
-                        <Sys01_VideoNodes />
+                        <Sys01_VideoNodes
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
                       </PublicRoute>
                     }
                   />
                   <Route
+                    path="/video_nodes/*"
+                    element={
+                      <PublicRoute>
+                        <Sys01_VideoNodes
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
+                      </PublicRoute>
+                    }
+                  />
+
+                  <Route
                     path="/Sys02_Mentoring/*"
                     element={
                       <StrictRoute requiredTier="OMEGA">
-                        <Sys02_Mentoring />
+                        <Sys02_Mentoring
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
+                      </StrictRoute>
+                    }
+                  />
+                  <Route
+                    path="/video_mentoring/*"
+                    element={
+                      <StrictRoute requiredTier="OMEGA">
+                        <Sys02_Mentoring
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
                       </StrictRoute>
                     }
                   />
@@ -2195,23 +2210,96 @@ export function App() {
                     path="/Sys03_ImgGallery/*"
                     element={
                       <PublicRoute>
-                        <Sys03_ImgGallery />
+                        <Sys03_ImgGallery
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
                       </PublicRoute>
                     }
                   />
+                  <Route
+                    path="/nexus_img_gallery/*"
+                    element={
+                      <PublicRoute>
+                        <Sys03_ImgGallery
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
+                      </PublicRoute>
+                    }
+                  />
+
                   <Route
                     path="/Sys04_VideoGallery/*"
                     element={
                       <PublicRoute>
-                        <Sys04_VideoGallery />
+                        <Sys04_VideoGallery
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
                       </PublicRoute>
                     }
                   />
                   <Route
-                    path="/SYS05_Directory/*"
-                    element={<SYS05_Directory />}
+                    path="/nexus_video_gallery/*"
+                    element={
+                      <PublicRoute>
+                        <Sys04_VideoGallery
+                          setActiveTab={setActiveTab}
+                          userState={userState}
+                          themeColor={themeColor}
+                          setThemeColor={setThemeColor}
+                          onThemeChange={setThemeColor}
+                        />
+                      </PublicRoute>
+                    }
                   />
-                  <Route path="/links/*" element={<SYS05_Directory />} />
+
+                  <Route
+                    path="/SYS05_Directory/*"
+                    element={
+                      <SYS05_Directory
+                        setActiveTab={setActiveTab}
+                        userState={userState}
+                        themeColor={themeColor}
+                        setThemeColor={setThemeColor}
+                        onThemeChange={setThemeColor}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/sys05-directory/*"
+                    element={
+                      <SYS05_Directory
+                        setActiveTab={setActiveTab}
+                        userState={userState}
+                        themeColor={themeColor}
+                        setThemeColor={setThemeColor}
+                        onThemeChange={setThemeColor}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/links/*"
+                    element={
+                      <SYS05_Directory
+                        setActiveTab={setActiveTab}
+                        userState={userState}
+                        themeColor={themeColor}
+                        setThemeColor={setThemeColor}
+                        onThemeChange={setThemeColor}
+                      />
+                    }
+                  />
 
                   {/* ======================================================= */}
                   {/* 🌌 8. SUBDOMÉNY OS GENESIS (SUB 00 - SUB 15 REGISTER)    */}
@@ -2272,14 +2360,13 @@ export function App() {
         {/* Podmienka: Skrytý na dimenziách /id*, systémových portoch a logine    */}
         {/* (Dimenzie ID00-ID15 používajú vlastný nakalibrovaný GlobalDimensionHub)*/}
         {/* ==================================================================== */}
-        {!location.pathname.includes("nexus_") &&
-          !location.pathname.includes("video_") &&
-          location.pathname !== "/login" && (
+        {location.pathname !== "/login" &&
+          !location.pathname.includes("/uplinkmodal") && (
             <footer className="w-full relative z-10">
               <GlobalFooter
-                activeTab={activeTab || "id08"}
-                userTier={userTier || "QUEST"}
-                themeColor={themeColor || "#00F3FF"}
+                activeTab={activeTab}
+                userTier={userTier}
+                themeColor={themeColor}
                 onNavigate={(route) => {
                   const targetRoute = route.startsWith("/") ? route : `/${route}`;
                   if (typeof navigate === "function") navigate(targetRoute);
@@ -2288,29 +2375,30 @@ export function App() {
                 onOpenSystemLog={() => setIsSystemLogOpen(true)}
               />
             </footer>
-          )}
+        )}
 
         {/* ==================================================================== */}
         {/* 2. 🛸 PLÁVAJÚCE UI: HAMBURGER MENU & LASER SCANNER / VIZUÁLNE EFEKTY */}
         {/* ==================================================================== */}
-        {location.pathname !== "/login" && (
-          <aside
-            aria-label="Nexus Navigation Layer"
-            className={`fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 ${
-              showGlobalProfile ? "opacity-0 invisible" : "opacity-100 visible"
-            }`}
-          >
-            <div className="pointer-events-auto">
-              <GlobalHamburgerMenu
-                activeTab={activeTab}
-                themeColor={themeColor}
-              />
-              <GlobalComponents
-                themeColor={themeColor}
-                userState={userState}
-              />
-            </div>
-          </aside>
+        {location.pathname !== "/login" &&
+          !location.pathname.includes("/uplinkmodal") && (
+            <aside
+              aria-label="Nexus Navigation Layer"
+              className={`fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 ${
+                showGlobalProfile ? "opacity-0 invisible" : "opacity-100 visible"
+              }`}
+            >
+              <div className="pointer-events-auto">
+                <GlobalHamburgerMenu
+                  activeTab={activeTab}
+                  themeColor={themeColor}
+                />
+                <GlobalComponents
+                  themeColor={themeColor}
+                  userState={userState}
+                />
+              </div>
+            </aside>
         )}
 
         {/* ==================================================================== */}

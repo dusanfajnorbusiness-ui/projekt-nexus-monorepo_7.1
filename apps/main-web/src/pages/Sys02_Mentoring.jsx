@@ -1,9 +1,6 @@
-import { GlobalComponents } from "@shared/components/GlobalComponents.jsx";
-import { GlobalFooter } from "@shared/components/GlobalFooter.jsx";
-import { GlobalHamburgerMenu } from "@shared/components/GlobalHamburgerMenu.jsx";
 import { SoundFX } from "@shared/utils/SoundEngine.js";
 import { Activity, ArrowLeft, Clock, ShieldAlert, Terminal, Users } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CORE_VERSION = "SYS02-VIDEO_MENTORING V20.0-STANDBY";
@@ -11,8 +8,23 @@ const DIM_COLOR = "#E91E63";
 const STANDBY_IMAGE =
   "https://ljyvsolsgliephsfkfgx.supabase.co/storage/v1/object/public/shop/images/sys01-05_modulMaster/16x9_desktop/SYS02_MENTORING-16x9.jpg";
 
-export const Sys02_Mentoring = () => {
+export const Sys02_Mentoring = ({
+  onThemeChange,
+  setThemeColor,
+  setActiveTab,
+}) => {
   const navigate = useNavigate();
+
+  // 🎯 Kánonická aktivácia ružového motívu (#E91E63) a tabu sys02
+  useEffect(() => {
+    if (typeof setActiveTab === "function") {
+      setActiveTab("sys02");
+    }
+    const triggerTheme = onThemeChange || setThemeColor;
+    if (typeof triggerTheme === "function") {
+      triggerTheme(DIM_COLOR);
+    }
+  }, [onThemeChange, setThemeColor, setActiveTab]);
 
   const handleBackHome = () => {
     if (SoundFX && typeof SoundFX.click === "function") SoundFX.click();
@@ -124,9 +136,9 @@ export const Sys02_Mentoring = () => {
         </div>
       </div>
 
-      <GlobalComponents themeColor={DIM_COLOR} />
+      {/* <GlobalComponents themeColor={DIM_COLOR} />
       <GlobalHamburgerMenu activeTab="sys02" themeColor={DIM_COLOR} />
-      <GlobalFooter themeColor={DIM_COLOR} />
+      <GlobalFooter themeColor={DIM_COLOR} /> */}
     </div>
   );
 };
